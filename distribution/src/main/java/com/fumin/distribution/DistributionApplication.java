@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Bean;
 import com.alibaba.druid.pool.DruidDataSource;
 
 @SpringBootApplication
-@MapperScan("com.ipc.gold.dao") 
+@MapperScan("com.fumin.distribution.dao") 
 public class DistributionApplication extends SpringBootServletInitializer {
 
 	public static void main(String[] args) {
