@@ -13,10 +13,10 @@ import com.alibaba.druid.pool.DruidDataSource;
 
 @SpringBootApplication
 @MapperScan("com.ipc.gold.dao") 
-public class GoldFullApplication extends SpringBootServletInitializer {
+public class DistributionApplication extends SpringBootServletInitializer {
 
 	public static void main(String[] args) {
-		SpringApplication.run(GoldFullApplication.class, args);
+		SpringApplication.run(DistributionApplication.class, args);
 	}
 	
 	@Bean("dataSource")
