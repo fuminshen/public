@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: config-server
+  cloud:
+    config:
+      name: food
+      label: master
+      profile: test
+      uri: http://127.0.0.1:9999

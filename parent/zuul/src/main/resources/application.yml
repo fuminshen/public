@@ -1,0 +1,16 @@
+server:
+  port: 9527
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+  instance:
+    prefer-ip-address: true
+    instance-id: eureka-zuul
+
+zuul:
+  routes:
+    api:
+      path: /s/**
+      service-id: eureka-food

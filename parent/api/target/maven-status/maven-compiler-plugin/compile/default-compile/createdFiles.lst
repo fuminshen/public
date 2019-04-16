@@ -1,0 +1,7 @@
+com\fumin\food\feign\FoodFeignService.class
+com\fumin\food\feign\HystrixFallbackForFeign.class
+com\fumin\food\feign\HystrixFallbackForFeign$1.class
+com\fumin\food\util\MD5.class
+com\fumin\food\util\SQLTable.class
+com\fumin\food\entity\NavBar.class
+com\fumin\food\entity\Items.class
