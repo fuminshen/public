@@ -1,0 +1,31 @@
+<th:block th:replace="/public/template::iframe(~{::body},~{::footerScript},~{::title})">
+<title>角色岗位</title>
+<body th:remove="tag">
+<div class="box box-info">
+    <div class="box-header with-border">
+      <h3 class="box-title">[[${vo==null}?'新增角色':'修改角色']]</h3>
+    </div>
+    <!-- /.box-header -->
+    <!-- form start -->
+    <form class="form-horizontal" th:attr="action=${vo!=null}?@{/role/update}:@{/role/add}" method="post">
+      <input th:field="${vo.id}" type="hidden" th:if="${vo!=null}">
+      <div class="box-body">
+        <div class="form-group">
+          <label for="inputEmail3" class="col-sm-2 control-label">名称</label>
+
+          <div class="col-sm-10">
+            <input type="text" class="form-control" id="inputEmail3" placeholder="角色名称" name="name" th:value="${vo?.name}">
+          </div>
+        </div>
+      <!-- /.box-body -->
+      <div class="box-footer">
+        <button type="submit" class="btn btn-info"><i class="fa fa-save"></i> 保存</button>
+        <button type="button" class="btn btn-default" onclick="self.location=document.referrer;"><i class="fa fa-arrow-left"></i> 返回</button>
+      </div>
+      <!-- /.box-footer -->
+    </form>
+  </div>
+</body>
+<footerScript th:remove="tag">
+</footerScript>
+</th:block>

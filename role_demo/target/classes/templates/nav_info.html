@@ -1,0 +1,60 @@
+<th:block th:replace="/public/template::iframe(~{::body},~{::footerScript},~{::title})">
+<title>导航菜单</title>
+<body th:remove="tag">
+<div class="box box-info">
+    <div class="box-header with-border">
+      <h3 class="box-title">[[${vo==null}?'新增菜单':'修改菜单']]</h3>
+    </div>
+    <!-- /.box-header -->
+    <!-- form start -->
+    <form class="form-horizontal" th:attr="action=${vo!=null}?@{/nav/update}:@{/nav/add}" method="post">
+      <input th:field="${vo.id}" type="hidden" th:if="${vo!=null}">
+      <div class="box-body">
+        <div class="form-group">
+          <label for="inputEmail3" class="col-sm-2 control-label">名称</label>
+
+          <div class="col-sm-10">
+            <input type="text" class="form-control" id="inputEmail3" placeholder="菜单名称" name="name" th:value="${vo?.name}">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputPassword3" class="col-sm-2 control-label">路径</label>
+
+          <div class="col-sm-10">
+            <input type="text" class="form-control" id="inputPassword3" placeholder="地址路径" name="url" th:value="${vo?.url}">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="ico" class="col-sm-2 control-label">图标</label>
+
+          <div class="col-sm-10">
+            <input type="text" class="form-control" id="ico" placeholder="地址路径" name="icon" th:value="${vo?.icon}">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label">显示</label>
+
+          <div class="col-sm-10">
+          	<div class="radio">
+              <label>
+                <input type="radio" value="0" name="hide" th:checked="${vo?.hide == 0}"> 显示
+              </label>
+              <label>
+                <input type="radio" value="1" name="hide" th:checked="${vo?.hide == 1}"> 隐藏
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- /.box-body -->
+      <div class="box-footer">
+        <button type="submit" class="btn btn-info"><i class="fa fa-save"></i> 保存</button>
+        <button type="button" class="btn btn-default" onclick="self.location=document.referrer;"><i class="fa fa-arrow-left"></i> 返回</button>
+      </div>
+      <!-- /.box-footer -->
+    </form>
+  </div>
+</body>
+<footerScript th:remove="tag">
+</footerScript>
+</th:block>

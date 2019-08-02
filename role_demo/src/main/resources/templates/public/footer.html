@@ -1,0 +1,9 @@
+<th:block th:fragment="footer(scripts)">
+<script th:src="@{/bower_components/jquery/dist/jquery.min.js}"></script>
+<script th:src="@{/bower_components/bootstrap/dist/js/bootstrap.min.js}"></script>
+<script th:src="@{/dist/js/adminlte.min.js}"></script>
+<script th:src="@{/js/bootbox.js}"></script>
+<th:block th:if="${not #strings.isEmpty(scripts)}">
+<th:block th:replace="${scripts}" />
+</th:block>
+</th:block>

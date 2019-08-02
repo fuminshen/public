@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Implementation-Title: jianhang_pos
+Implementation-Version: 0.0.1-SNAPSHOT
+Built-By: fumin
+Implementation-Vendor-Id: com.fumin.role.admin
+Build-Jdk: 1.8.0_71
+Implementation-URL: https://projects.spring.io/spring-boot/#/spring-bo
+ ot-starter-parent/role_demo
+Created-By: Maven Integration for Eclipse
+

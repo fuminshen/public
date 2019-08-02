@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!-- Main Header -->
+  <header th:fragment="header_body" class="main-header">
+
+    <!-- Logo -->
+    <a th:href="@{/}" class="logo">
+      <!-- mini logo for sidebar mini 50x50 pixels -->
+      <span class="logo-mini"><b>后台管理</b></span>
+      <!-- logo for regular state and mobile devices -->
+      <span class="logo-lg"><b>后台管理</b>系统</span>
+    </a>
+
+    <!-- Header Navbar -->
+    <nav class="navbar navbar-static-top" role="navigation">
+      <!-- Sidebar toggle button-->
+      <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+        <span class="sr-only">菜单</span>
+      </a>
+      <!-- Navbar Right Menu -->
+      <div class="navbar-custom-menu">
+        <ul class="nav navbar-nav">
+          
+          <!-- User Account Menu -->
+          <li class="dropdown user user-menu">
+            <!-- Menu Toggle Button -->
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              <!-- The user image in the navbar-->
+              <img th:src="@{/dist/img/user_img_500+500.jpg}" class="user-image" alt="User Image">
+              <!-- hidden-xs hides the username on small devices so only the image appears. -->
+              <span class="hidden-xs" th:text="${session.admin.username}"></span>
+            </a>
+            <ul class="dropdown-menu">
+              <!-- The user image in the menu -->
+              <li class="user-header">
+                <img th:src="@{/dist/img/user_img_500+500.jpg}" class="img-circle" alt="User Image">
+
+                <p>
+                  [[${session.admin.username}]] [[${session.admin.name}]]
+                  <small>[[${#dates.format(session.admin.addTime,'yyyy年MM月dd日')}]]</small>
+                </p>
+              </li>
+              
+              <!-- Menu Footer-->
+              <li class="user-footer">
+                <div class="pull-left">
+                  <a th:href="@{|/admin/get/${session.admin.id}|}" class="btn btn-default btn-flat">个人信息</a>
+                </div>
+                <div class="pull-right">
+                  <a th:href="@{|/logout?dt=${new java.util.Date().getTime()}|}" class="btn btn-default btn-flat">注销</a>
+                </div>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+</html>

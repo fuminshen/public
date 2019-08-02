@@ -1,0 +1,89 @@
+<th:block th:replace="/public/template::iframe(~{::body},~{::footerScript},~{::title})">
+<title>权限修改</title>
+<body th:remove="tag">
+<div class="box">
+ <div class="box-header">
+ 	<div>正在修改【<span class="text-success">[[${role.name}]]</span>】的权限</div>
+ 	<div>请在要赋予的功能前面打“<i class="fa fa-check"></i>”，不要的前面取消勾选即可</div>
+ 
+ </div>
+ 
+ <!-- /.box-header -->
+ <div class="box-body no-padding">
+   <table  id="example1" class="table table-striped">
+     <thead>
+       <tr>
+         <th>选择</th>
+         <th>名字</th>
+         <th>路径</th>
+       </tr>
+     </thead>
+   </table>
+ </div>
+ <!-- /.box-body -->
+ <div class="box-footer">
+ <button type="button" class="btn btn-info" onclick="self.location=document.referrer;"><i class="fa fa-arrow-left"></i> 返回</button>
+</div>
+</div>
+
+
+<input name="navIds" type="hidden" th:each="nav,iterStat:${rolenavs}" th:value="${nav.id}">
+</body>
+<footerScript th:remove="tag">
+<script th:src="@{/bower_components/datatables.net/js/jquery.dataTables.min.js}"></script>
+<script th:src="@{/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js}"></script>
+<script th:src="@{/js/pager_comm.js}"></script>
+<script>
+var data=$.fm.createPagerData('/role/navlist');
+data.paging=false;
+data.controllerBtn=false;
+data.setColumns([
+	{"data":null,"render": function (data, type, row, meta) {
+		var ipt=$("input[name=navIds]");
+		var ischecked=false;
+		for(var i=0;i<ipt.length;i++){
+			if(ipt.eq(i).val() == data.id){
+				ischecked=true;
+			}
+		}
+		return "<input value='"+data.id+"' type='checkbox' "+(ischecked?"checked":"")+" onclick='changeChecked(this)'>";
+		}
+	},
+	{"data":"name"},
+	{"data":"url"}
+]);
+$(function () {
+	$('#example1').DataTable(data);
+});
+function changeChecked(obj){
+	var data   ={};
+	var url    = "[[@{/role/}]]";
+	data.roleId = [[${role.id}]];
+	data.navId  = obj.value;
+	
+	if(obj.checked){
+		url+="addnav";
+	}else{
+		url+="removenav";
+	}
+	$.ajax({async: false});
+	$.post(url,data,function(result){
+		if(result){
+			if($.trim(result)=="success"){
+				var html=$('<div class="alert alert-success alert-dismissible" style="display:none">\
+				   <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>\
+				   <i class="icon fa fa-check"></i> 修改成功\
+				 </div>');
+				 $(".box").append(html);
+				 html.fadeIn(800);
+				 setTimeout(function(){html.fadeOut(500)},3000);
+				return;
+			}
+		}
+		bootbox.alert("修改失败");
+		obj.checked = !obj.checked;
+	});
+}
+</script>
+</footerScript>
+</th:block>

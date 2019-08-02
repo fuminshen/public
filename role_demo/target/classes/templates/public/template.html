@@ -1,0 +1,36 @@
+<th:block th:fragment="iframe(html_body_text,footer_script,title)">
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:replace="/public/header :: common_header(${title},~{::link},~{})">
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+
+  <header th:replace="/public/body_header :: header_body"/>
+
+  <section th:replace="/public/nav :: nav"/>
+
+  <div class="content-wrapper">
+    <section class="content-header">
+      <h1>
+        管理系统
+        <th:block th:with="var1=${#strings.replace(title,'<title>','')}">
+        <small th:utext="${#strings.replace(var1,'</title>','')}"></small>
+        </th:block>
+      </h1>
+      
+    </section>
+
+    <section class="content container-fluid">
+      <th:block th:replace="${html_body_text}" />
+    </section>
+  </div>
+
+  <footer th:replace="/public/footer_text :: footerTxt">
+  </footer>
+  <th:block th:replace="/public/footer_text ::control-sidebar"></th:block>
+</div>
+<th:block th:replace="/public/footer :: footer(${footer_script})"/>
+</body>
+</html>
+</th:block>

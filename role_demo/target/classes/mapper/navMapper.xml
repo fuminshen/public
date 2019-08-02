@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="com.fumin.role.demo.mapper.NavMapper">
+	<select id="getByRole" resultType="com.fumin.role.demo.bean.Nav">
+		select a.* from g_nav a right join g_role_nav b on b.navId = a.id where b.roleId=${id}
+	</select>
+	
+	<insert id="setForRole">
+		insert into g_role_nav (roleId,navId)values(${roleId},${navId})
+	</insert>
+	
+	<delete id="delForRole">
+		delete from g_role_nav where roleId=${roleId} and navId=${navId}
+	</delete>
+</mapper>

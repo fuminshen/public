@@ -1,0 +1,26 @@
+<th:block th:replace="/public/template::iframe(~{::body},~{::footerScript},~{::title})">
+<title>首页</title>
+<body th:remove="tag">
+
+<div class="callout callout-success">
+  <h4><i class="icon fa fa-check"></i> 登陆成功</h4>
+  <span id="pc" style="display:none">请点击左侧的菜单进行操作</span>
+  <span id="ph" style="display:none">请点击左上方的“<i class="fa fa-bars"></i>”图标进行操作</span>
+</div>
+</body>
+<footerScript th:remove="tag">
+<script>
+$(function(){
+var isOnPc=!(/Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent));
+var msg;
+if(isOnPc)
+{
+  $('#pc').show();
+}
+else{
+	$('#ph').show();
+}
+});
+</script>
+</footerScript>
+</th:block>

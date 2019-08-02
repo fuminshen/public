@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head th:replace="/public/header :: common_header(~{::title},~{},~{})">
+    <title>严重错误</title>
+  </head>
+	<body>
+		<section class="content">
+
+      <div class="error-page">
+        <h2 class="headline text-red"><th:block th:text="${code}"></th:block></h2>
+
+        <div class="error-content">
+          <h3><i class="fa fa-warning text-red"></i> <th:block th:text="${message}"></th:block></h3>
+          
+          <h4><i class="fa fa-clock-o text-red"></i> [[${#dates.format(new java.util.Date().getTime(), 'yyyy-MM-dd hh:mm:ss')}]]</h4>
+
+          <p>
+            
+            请您将错误时间和所操作的内容一起发给管理人员，您还可以 <a href="javascript:history.back()">返回上一步</a> 
+            或者返回<a th:href="@{/}">首页</a>
+          </p>
+
+          
+        </div>
+      </div>
+      <!-- /.error-page -->
+
+    </section>
+    
+	</body>
+</html>
