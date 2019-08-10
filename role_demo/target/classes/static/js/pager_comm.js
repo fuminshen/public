@@ -1,5 +1,7 @@
 jQuery.fm={
-	createPagerData:function(ajaxUrl){
+	//第一个参数：数据的查询url
+	//第二个参数：搜索框form的selected，jquery格式
+	createPagerData:function(ajaxUrl,searchBtn){
 	var pager_data = {
 		paging      : true,
 		lengthChange: false,
@@ -47,6 +49,32 @@ jQuery.fm={
 			}else{
 				aoDt.page = 1;
 			}
+			if(searchBtn || $("#searchFrm").length){
+				if(!searchBtn){
+					searchBtn="#searchFrm";
+				}
+				var json = $(searchBtn).serializeArray();
+				var jsonStr="{";
+				$.each(json,function(e){
+					if($.trim(json[e].value)!=""){
+						var key;
+						var value;
+						if( json[e].name.indexOf("_like")>=0 ){
+							key = json[e].name.substring(0,json[e].name.length-5);
+							value = json[e].value+"%";
+						}else{
+							key = json[e].name;
+							value = json[e].value;
+						}
+						jsonStr+="\""+key+"\":\""+value+"\",";
+					}
+				});
+				if(jsonStr!="{"){
+					jsonStr=jsonStr.substring(0,jsonStr.length-1)+"}";
+					aoDt.map=jsonStr;
+				}
+			}
+			
 			$.ajax({
 		        url: sSource,
 		        data: aoDt,

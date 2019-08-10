@@ -1,6 +1,35 @@
 <th:block th:replace="/public/template::iframe(~{::body},~{::footerScript},~{::title})">
 <title>用户列表</title>
 <body th:remove="tag">
+<div class="box box-info">
+  <div class="box-header with-border">
+    <h3 class="box-title">搜索条件</h3>
+
+    <div class="box-tools pull-right">
+      <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+      </button>
+    </div>
+  </div>
+  <div class="box-body">
+    <form id="searchFrm">
+      <div class="form-group">
+    	<div class="input-group">
+        <div class="input-group-addon">姓名</div>
+        <input type="text" class="form-control" name="name_like" th:value="${param.name_like}">
+      </div>
+      </div>
+      <div class="form-group">
+      <div class="input-group">
+        <div class="input-group-addon">账号</div>
+        <input type="text" class="form-control" name="username" th:value="${param.username}">
+      </div>
+      </div>
+      <button type="submit" class="btn btn-info"><i class="fa fa-search"></i> 搜索</button>
+      <a href="?" class="btn btn-default"><i class="fa fa-times"></i> 清空</a>
+    </form>
+  </div>
+</div>
+
 <div class="box">
             <div class="box-header">
               <a th:href="@{/admin/new}" class="btn btn-info"><i class="fa fa-plus"></i> 新增</a>
@@ -28,7 +57,7 @@
 <script th:src="@{/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js}"></script>
 <script th:src="@{/js/pager_comm.js}"></script>
 <script>
-var data=$.fm.createPagerData("/admin/list");
+var data=$.fm.createPagerData("/admin/list","#searchFrm");
 data.setColumns([
 	{"data":"username"},
 	{"data":"name"},

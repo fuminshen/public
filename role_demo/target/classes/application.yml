@@ -5,9 +5,11 @@ server:
 mybatis:
   configuration:
     map-underscore-to-camel-case: false
+    call-setters-on-nulls: true
   mapper-locations: classpath:mapper/*Mapper.xml
   configuration-properties:
     enumAsSimpleTpe: true
+    
 
 mapper:
   style: normal
@@ -16,7 +18,7 @@ mapper:
 
 logging:
   level:
-    com.fumin.jianhang.pos: debug
+    com.fumin.role.demo: debug
   
 spring:
   thymeleaf:

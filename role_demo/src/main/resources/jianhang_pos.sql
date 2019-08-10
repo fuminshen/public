@@ -11,7 +11,7 @@
  Target Server Version : 50644
  File Encoding         : 65001
 
- Date: 02/08/2019 09:21:43
+ Date: 10/08/2019 17:34:07
 */
 
 SET NAMES utf8mb4;
@@ -51,18 +51,27 @@ DROP TABLE IF EXISTS `g_client`;
 CREATE TABLE `g_client`  (
   `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `companyId` int(11) DEFAULT NULL,
+  `number` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `name` varchar(2000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `address` varchar(2000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `phone` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `longitude` decimal(19, 8) DEFAULT NULL COMMENT '经度',
   `latitude` decimal(19, 8) DEFAULT NULL COMMENT '维度',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Compact;
+  `manager` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '联系人',
+  `userId` int(10) UNSIGNED DEFAULT NULL,
+  `isChecked` int(11) DEFAULT 0,
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `number`(`number`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of g_client
 -- ----------------------------
-INSERT INTO `g_client` VALUES (1, NULL, '皮包公司1', '亏大发了时间舍得离开房间', '1238439827', NULL, NULL);
+INSERT INTO `g_client` VALUES (1, NULL, '42342342', '皮包公司1', '亏大发了时间舍得离开房间', '1238439827', NULL, NULL, NULL, NULL, 0);
+INSERT INTO `g_client` VALUES (2, NULL, '0011', '大商铺', '武陵东路55号', NULL, NULL, NULL, '张三', NULL, 0);
+INSERT INTO `g_client` VALUES (3, NULL, '0012', '小商铺', '团结西路32号', NULL, NULL, NULL, '李四', NULL, 0);
+INSERT INTO `g_client` VALUES (4, NULL, '0013', '中商铺', '光明北路17号', NULL, NULL, NULL, '王五', NULL, 0);
+INSERT INTO `g_client` VALUES (5, NULL, '0014', '新商铺', '光明西路', NULL, NULL, NULL, '赵六', NULL, 0);
 
 -- ----------------------------
 -- Table structure for g_company
@@ -101,7 +110,7 @@ CREATE TABLE `g_nav`  (
   `parent` int(10) UNSIGNED DEFAULT 0,
   `icon` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of g_nav
@@ -111,6 +120,7 @@ INSERT INTO `g_nav` VALUES (2, '导航菜单', '/nav/index', 0, 0, 'fa fa-bars')
 INSERT INTO `g_nav` VALUES (3, '岗位角色', '/role/index', 0, 0, 'fa fa-group');
 INSERT INTO `g_nav` VALUES (4, '用户管理', '/admin/index', 0, 0, 'fa fa-user');
 INSERT INTO `g_nav` VALUES (5, '客户管理', '/client/index', 0, 0, 'fa fa-street-view');
+INSERT INTO `g_nav` VALUES (6, '终端管理', '/terminal/index', 0, 0, 'fa fa-microchip');
 
 -- ----------------------------
 -- Table structure for g_role
@@ -151,5 +161,29 @@ INSERT INTO `g_role_nav` VALUES (5, 2, 1);
 INSERT INTO `g_role_nav` VALUES (24, 2, 3);
 INSERT INTO `g_role_nav` VALUES (25, 2, 4);
 INSERT INTO `g_role_nav` VALUES (26, 3, 1);
+
+-- ----------------------------
+-- Table structure for g_terminal
+-- ----------------------------
+DROP TABLE IF EXISTS `g_terminal`;
+CREATE TABLE `g_terminal`  (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `number` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `clientId` int(10) UNSIGNED NOT NULL,
+  `userId` int(10) UNSIGNED DEFAULT NULL,
+  `addTime` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `number`(`number`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Records of g_terminal
+-- ----------------------------
+INSERT INTO `g_terminal` VALUES (1, '100001', 2, NULL, '2019-08-10 15:37:04');
+INSERT INTO `g_terminal` VALUES (2, '100002', 3, NULL, '2019-08-10 15:38:06');
+INSERT INTO `g_terminal` VALUES (3, '100003', 4, NULL, '2019-08-10 15:39:26');
+INSERT INTO `g_terminal` VALUES (4, '100004', 3, NULL, '2019-08-10 16:17:39');
+INSERT INTO `g_terminal` VALUES (5, '100005', 1, NULL, '2019-08-10 17:20:01');
+INSERT INTO `g_terminal` VALUES (6, '100006', 5, NULL, '2019-08-10 17:20:59');
 
 SET FOREIGN_KEY_CHECKS = 1;

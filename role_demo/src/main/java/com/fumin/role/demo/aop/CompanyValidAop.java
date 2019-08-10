@@ -30,11 +30,11 @@ import com.fumin.role.demo.util.ShiroRealm;
 @Configuration
 public class CompanyValidAop {
 
-	@Pointcut("execution(public com.github.pagehelper.PageInfo com.ipc.gold.free.service..*.*(..)) || execution(public java.util.List com.ipc.gold.free.service..*.*(..))")
+	@Pointcut("execution(public com.github.pagehelper.PageInfo com.fumin.role.demo.service..*.*(..)) || execution(public java.util.List com.fumin.role.demo.service..*.*(..))")
     public void serviceAop(){}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	@Around("serviceAop()")
+	//@Around("serviceAop()")
 	public Object before(ProceedingJoinPoint joinPoint) throws Throwable{
 		ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpSession session = attributes.getRequest().getSession();
