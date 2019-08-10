@@ -43,8 +43,6 @@ public class ShiroConfig {
 		filterChainDefinitionMap.put("/plugins/**", "anon");
 		filterChainDefinitionMap.put("/loginAction", "anon");
 		
-		filterChainDefinitionMap.put("/user/**", "authc,roles[user]");
-		filterChainDefinitionMap.put("/order/new", "roles[admin]");
 		//配置退出 过滤器,其中的具体的退出代码Shiro已经替我们实现了
 		//filterChainDefinitionMap.put("/logout", "logout");
 		//<!-- 过滤链定义，从上向下顺序执行，一般将/**放在最为下边 -->:这是一个坑呢，一不小心代码就不好使了;
