@@ -1,5 +1,5 @@
 <th:block th:replace="/public/template::iframe(~{::body},~{::footerScript},~{::title})">
-<title>客户列表</title>
+<title>添加终端 -> 选择客户</title>
 <body th:remove="tag">
 
 <div class="box box-info">
@@ -27,14 +27,13 @@
       </div>
       <button type="submit" class="btn btn-info"><i class="fa fa-search"></i> 搜索</button>
       <a href="?" class="btn btn-default"><i class="fa fa-times"></i> 清空</a>
+      <button type="button" class="btn btn-default" onclick="history.go(-1);"><i class="fa fa-arrow-left"></i> 返回</button>
     </form>
   </div>
 </div>
-
 <div class="box">
             <div class="box-header">
-              <a th:href="@{/client/new}" class="btn btn-info"><i class="fa fa-plus"></i> 新增客户</a>
-              <span class="text-danger"></span>
+              
             </div>
             <!-- /.box-header -->
             <div class="box-body no-padding">
@@ -45,8 +44,7 @@
                     <th>编号</th>
                     <th>联系人</th>
                     <th>地址</th>
-                    <th>巡检状态</th>
-                    <th>编辑</th>
+                    <th>选择</th>
                   </tr>
                 </thead>
               </table>
@@ -58,20 +56,17 @@
 <script th:src="@{/bower_components/datatables.net/js/jquery.dataTables.min.js}"></script>
 <script th:src="@{/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js}"></script>
 <script th:src="@{/js/pager_comm.js}"></script>
-<script th:inline="javascript">
-var data=$.fm.createPagerData("/client/list");
-data.controllerWidth=100;
-data.controllerAddBtnText="<a href='/terminal/info?clientId=#id' title='新增终端'><i class='fa fa-plus text-success'></i></a>";
-data.controllerAddBtnText+=" <a href='/terminal/index?clientId=#id' title='查看终端'><i class='fa fa-eye text-yellow'></i></a>";
+<script>
+var data=$.fm.createPagerData("/client/list","#searchFrm");
+data.controllerBtn=false;
 data.setColumns([
 	{"data":"name"},
 	{"data":"number"},
 	{"data":"manager"},
 	{"data":"address"},
-	{"data":null,width:100,"render": function (data, type, row, meta) {
-		var text=data.isChecked==1?"已巡检":"未巡检";
-		return text;
-	}}
+	{"data":null,"render": function (data, type, row, meta) {
+		return "<a href='/terminal/new/"+data.id+"'>选择</a>"}
+	}
 ]);
 $(function () {
 	$('#example1').DataTable(data );

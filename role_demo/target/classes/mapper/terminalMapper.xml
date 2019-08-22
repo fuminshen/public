@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="com.fumin.role.demo.mapper.TerminalMapper">
+	<select id="getListToMapRewrite" resultType="map">
+		select a.id as tid,a.number as tNumber,b.* from g_terminal a left join g_client b on b.id=a.clientId
+		<if test="params != null">
+		<where>
+			<foreach collection="params" index="key" item="value">
+				<choose>
+					<when test='key == "addTime_start"'>
+						and a.addTime &gt;= #{value}
+					</when>
+					<otherwise>
+						<choose>
+							<when test='key == "addTime_end"'>
+								and a.addTime &lt;= #{value}
+							</when>
+							<otherwise>
+								and a.${key} = #{value}
+							</otherwise>
+						</choose>
+					</otherwise>
+				</choose>
+			</foreach>
+		</where>
+		</if>
+		order by a.id desc
+	</select>
+</mapper>

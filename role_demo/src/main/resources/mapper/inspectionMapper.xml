@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="com.fumin.role.demo.mapper.InspectionMapper">
+	<select id="getInspectionToMap" resultType="map">
+		select b.*,a.time,a.type,a.userId from g_inspection a inner join g_client b on b.id=a.clientId
+		<if test="params != null">
+			<where>
+				<foreach collection="params" item="value" index="key">
+					<choose>
+						<when test='key == "addTime_start"'>
+							and a.time &gt;= #{value}
+						</when>
+						<otherwise>
+							<choose>
+								<when test='key == "addTime_end"'>
+									and a.time &lt;= #{value}
+								</when>
+								<otherwise>
+									and a.${key} = #{value}
+								</otherwise>
+							</choose>
+						</otherwise>
+					</choose>
+				</foreach>
+			</where>
+		</if>
+		order by a.time desc
+	</select>
+	
+	<select id="">
+		select a.*,b.time,c.name as adminName,c.username,
+		sum(case when b.type=1 then 1 else 0 end) as xj,
+		sum(case when b.type=2 then 1 else 0 end) as xz,
+		sum(case when b.type=3 then 1 else 0 end) as wx 
+		from g_client a left join g_inspection b on b.clientId=a.id 
+		left join g_admins c on c.id=b.userId
+		<if test="params != null">
+			<where>
+				<foreach collection="params" item="value" index="key">
+					<choose>
+						<when test='key == "addTime_start"'>
+							and a.time &gt;= #{value}
+						</when>
+						<otherwise>
+							<choose>
+								<when test='key == "addTime_end"'>
+									and a.time &lt;= #{value}
+								</when>
+								<otherwise>
+									and a.${key} = #{value}
+								</otherwise>
+							</choose>
+						</otherwise>
+					</choose>
+				</foreach>
+			</where>
+		</if>
+		group by a.id
+	</select>
+</mapper>

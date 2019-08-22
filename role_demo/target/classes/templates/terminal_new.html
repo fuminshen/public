@@ -1,0 +1,21 @@
+<th:block th:replace="/public/template::iframe(~{::body},~{::footerScript},~{::title})">
+<title>终端信息</title>
+<body th:remove="tag">
+<div class="box box-info">
+    <div class="box-header with-border">
+      <h3 class="box-title">新增终端</h3>
+    </div>
+    <!-- /.box-header -->
+    <!-- form start -->
+      <!-- /.box-body -->
+      <div class="box-footer">
+        <a class="btn btn-info" th:href="@{/client/new?t=1}"><i class="fa fa-plus"></i> 新客户</a>
+        <a class="btn btn-danger" th:href="@{/client/modal}"><i class="fa fa-hand-pointer-o"></i> 老客户</a>
+        <button type="button" class="btn btn-default" onclick="history.go(-1);"><i class="fa fa-arrow-left"></i> 返回</button>
+      </div>
+      <!-- /.box-footer -->
+  </div>
+</body>
+<footerScript th:remove="tag">
+</footerScript>
+</th:block>

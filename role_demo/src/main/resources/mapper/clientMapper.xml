@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="com.fumin.role.demo.mapper.ClientMapper">
+	<update id="setDistributeClear" >
+		update g_client set userId=0 where userId!=0
+		<if test="companyId != null">
+		 and companyId=${companyId}
+		</if>
+	</update>
+	
+	<select id="selectClientCountForOneAdmin" resultType="int">
+		select ceiling(count(*)  / (select count(*) from g_admins where role=3
+		<if test="companyId != null">
+		 and companyId=${companyId}
+		</if>
+		)) from g_client
+		<if test="companyId != null">
+		 where companyId=${companyId}
+		</if>
+	</select>
+	
+	<update id="updateDistributeForAsc">
+		update g_client set userId=${userId}  where
+		<if test="companyId != null">
+		 companyId=${companyId} and
+		</if>
+		id in(select id from (select id from g_client 
+		<if test="companyId != null">
+		 where companyId=${companyId}
+		</if>
+		limit 
+		<if test="start != null">
+		 ${start},
+		</if>
+		${end}
+		) as tmp)
+	</update>
+	
+	<update id="updateDistributeForRand">
+		update g_client set userId=${userId}  where
+		<if test="companyId != null">
+		 companyId=${companyId} and
+		</if>
+		id in(select id from (select id from g_client where userId=0 
+		<if test="companyId != null">
+		 and companyId=${companyId}
+		</if>
+		order by rand()
+		limit ${end}
+		) as tmp)
+	</update>
+	
+	<update id="updateDistributeForManual">
+		update g_client set userId=${userId}  where
+		<if test="companyId != null">
+		 companyId=${companyId} and
+		</if>
+		id in
+		<foreach collection="ids" item="clientId" separator="," open="(" close=")">
+		 #{clientId}
+        </foreach>
+	</update>
+</mapper>

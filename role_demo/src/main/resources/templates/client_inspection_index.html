@@ -33,46 +33,47 @@
 
 <div class="box">
             <div class="box-header">
-              <a th:href="@{/client/new}" class="btn btn-info"><i class="fa fa-plus"></i> 新增客户</a>
-              <span class="text-danger"></span>
             </div>
             <!-- /.box-header -->
             <div class="box-body no-padding">
               <table  id="example1" class="table table-striped">
                 <thead>
                   <tr>
-                    <th>名称</th>
-                    <th>编号</th>
-                    <th>联系人</th>
-                    <th>地址</th>
-                    <th>巡检状态</th>
-                    <th>编辑</th>
+                    <th>客户列表</th>
                   </tr>
                 </thead>
               </table>
             </div>
-            <!-- /.box-body -->
           </div>
 </body>
 <footerScript th:remove="tag">
 <script th:src="@{/bower_components/datatables.net/js/jquery.dataTables.min.js}"></script>
 <script th:src="@{/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js}"></script>
 <script th:src="@{/js/pager_comm.js}"></script>
+
 <script th:inline="javascript">
-var data=$.fm.createPagerData("/client/list");
-data.controllerWidth=100;
-data.controllerAddBtnText="<a href='/terminal/info?clientId=#id' title='新增终端'><i class='fa fa-plus text-success'></i></a>";
-data.controllerAddBtnText+=" <a href='/terminal/index?clientId=#id' title='查看终端'><i class='fa fa-eye text-yellow'></i></a>";
+var data=$.fm.createPagerData("/client/inspection");
+data.controllerBtn=false;
 data.setColumns([
-	{"data":"name"},
-	{"data":"number"},
-	{"data":"manager"},
-	{"data":"address"},
 	{"data":null,width:100,"render": function (data, type, row, meta) {
-		var text=data.isChecked==1?"已巡检":"未巡检";
+        var text="<a href=\"/client/inspection/"+data.id+"\">\
+        	<div class=\"attachment-block clearfix \">\
+        <img class=\"attachment-img\" src=\"/images/dianpu_ico_s.jpg\"  style=\"border:1px solid #ccc;\" alt=\"Attachment Image\">\
+        <div class=\"attachment-pushed\">\
+          <h4 class=\"attachment-heading\"><i class=\"fa fa-"+(data.isChecked==0?"hourglass-1 text-red":"check text-green")+"\"></i> "+data.name+"</h4>\
+          <div class=\"attachment-text\"><i class='fa fa-phone'></i> "+(data.phone?data.phone:"")+
+          "</div>\
+          <div class=\"attachment-text\">"+data.address+
+          "</div>\
+        </div>\
+      </div></a>";
 		return text;
 	}}
 ]);
+data.fnCreatedRow=function( nRow, aData, iDataIndex ){    
+  $(nRow).find("td").css("padding","0");
+  $(nRow).find("td").css("background","#fbfbfb");
+}
 $(function () {
 	$('#example1').DataTable(data );
 })

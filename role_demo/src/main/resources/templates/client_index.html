@@ -33,7 +33,7 @@
 
 <div class="box">
             <div class="box-header">
-              <a th:href="@{/client/new}" class="btn btn-info"><i class="fa fa-plus"></i> 新增</a>
+              <a th:href="@{/client/new}" class="btn btn-info"><i class="fa fa-plus"></i> 新增客户</a>
               <span class="text-danger"></span>
             </div>
             <!-- /.box-header -->
@@ -45,6 +45,7 @@
                     <th>编号</th>
                     <th>联系人</th>
                     <th>地址</th>
+                    <th>巡检状态</th>
                     <th>编辑</th>
                   </tr>
                 </thead>
@@ -57,13 +58,20 @@
 <script th:src="@{/bower_components/datatables.net/js/jquery.dataTables.min.js}"></script>
 <script th:src="@{/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js}"></script>
 <script th:src="@{/js/pager_comm.js}"></script>
-<script>
+<script th:inline="javascript">
 var data=$.fm.createPagerData("/client/list");
+data.controllerWidth=100;
+data.controllerAddBtnText="<a href='/terminal/info?clientId=#id' title='新增终端'><i class='fa fa-plus text-success'></i></a>";
+data.controllerAddBtnText+=" <a href='/terminal/index?clientId=#id' title='查看终端'><i class='fa fa-eye text-yellow'></i></a>";
 data.setColumns([
 	{"data":"name"},
 	{"data":"number"},
 	{"data":"manager"},
-	{"data":"address"}
+	{"data":"address"},
+	{"data":null,width:100,"render": function (data, type, row, meta) {
+		var text=data.isChecked==1?"已巡检":"未巡检";
+		return text;
+	}}
 ]);
 $(function () {
 	$('#example1').DataTable(data );

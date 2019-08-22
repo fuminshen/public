@@ -1,6 +1,9 @@
 package com.fumin.role.demo.mapper;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.fumin.role.demo.bean.Client;
 import com.fumin.role.demo.util.DataMapper;
@@ -8,4 +11,23 @@ import com.fumin.role.demo.util.DataMapper;
 @Mapper
 public interface ClientMapper extends DataMapper<Client> {
 
+	public void setDistributeClear(@Param("companyId") Integer companyId);
+	
+	public int selectClientCountForOneAdmin(@Param("companyId") Integer companyId);
+	
+	public void updateDistributeForAsc(
+			@Param("companyId") Integer companyId,
+			@Param("userId")Integer userId,
+			@Param("start")Integer start,
+			@Param("end")Integer end);
+	
+	public void updateDistributeForRand(
+			@Param("companyId") Integer companyId,
+			@Param("userId")Integer userId,
+			@Param("end")Integer end);
+	
+	public void updateDistributeForManual(
+			@Param("companyId") Integer companyId,
+			@Param("userId")Integer userId,
+			@Param("ids")List<?> ids);
 }

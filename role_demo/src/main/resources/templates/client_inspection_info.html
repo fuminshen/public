@@ -1,0 +1,49 @@
+<th:block th:replace="/public/template::iframe(~{::body},~{::footerScript},~{::title})">
+<title>客户资料</title>
+<body th:remove="tag">
+    <!-- /.box-header -->
+    <div class="box box-widget widget-user-2">
+      <!-- Add the bg color to the header using any of the bg-* classes -->
+      <div th:class="|widget-user-header bg-${vo?.isChecked==0?'yellow':'green'}|">
+        <div class="widget-user-image">
+          <img class="img-circle" th:src="@{/images/dianpu_ico.jpg}" alt="User Avatar">
+        </div>
+        <!-- /.widget-user-image -->
+        <h3 class="widget-user-username" th:text="${vo?.name}"></h3>
+        <h5 class="widget-user-desc"><i class="fa fa-tags"></i> [[${vo?.number}]]</h5>
+      </div>
+      <div class="box-footer no-padding">
+        <ul class="nav nav-stacked">
+          <li><a href="#"><i class="fa fa-phone"></i> [[${vo?.phone}]] </a></li>
+          <li><a href="#"><i class="fa fa-user"></i> [[${vo?.manager}]]</a></li>
+          <li><a href="#"><i class="fa fa-globe"></i> [[${vo?.address}]]</a></li>
+          <li><a href="#"><i class="fa fa-user-plus"></i> [[${vo?.isChecked==0 }?'未巡检':'已巡检']]</a></li>
+        </ul>
+      </div>
+    </div>
+    <form th:action="@{/inspection/add}" method="post" id="frm">
+    <input type="hidden" name="clientId" th:value="${vo?.id}">
+    <input type="hidden" name="type">
+    <button class="btn btn-success" value="1" type="button"><i class="fa fa-check"></i> 已巡检</button>
+    <button class="btn btn-info" value="2" type="button"><i class="fa fa-plus"></i> 新安装</button>
+    <button class="btn btn-danger" value="3" type="button"><i class="fa fa-wrench"></i> 已维修</button>
+    <button class="btn btn-default" type="button" onclick="self.location=document.referrer;"><i class="fa fa-arrow-left"></i> 返回</button>
+    </form>
+</body>
+<footerScript th:remove="tag">
+<script>
+$(function(){
+	$("button").click(function(){
+		var t=this;
+		bootbox.confirm("“"+$(t).text()+"”操作确认？",function(result){
+			if(result){
+				$("input[name=type]").val(t.value);
+				$("#frm").submit();
+			}
+		});
+		return false;
+	});
+});
+</script>
+</footerScript>
+</th:block>

@@ -1,0 +1,166 @@
+<th:block th:replace="/public/template::iframe(~{::body},~{::footerScript},~{::title})">
+<link rel="stylesheet" th:href="@{/bower_components/select2/dist/css/select2.min.css}">
+<title>客户列表</title>
+<body th:remove="tag">
+
+<div class="box box-info">
+  <div class="box-header with-border">
+    <h3 class="box-title">搜索条件</h3>
+
+    <div class="box-tools pull-right">
+      <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+      </button>
+    </div>
+  </div>
+  <div class="box-body">
+    <form id="searchFrm">
+      <div class="form-group">
+    	<div class="input-group">
+        <div class="input-group-addon">客户名称</div>
+        <input type="text" class="form-control" name="name_like" th:value="${param.name_like}">
+      </div>
+      </div>
+      <div class="form-group">
+      <div class="input-group">
+        <div class="input-group-addon">客户编号</div>
+        <input type="text" class="form-control" name="number" th:value="${param.number}">
+      </div>
+      </div>
+      <div class="form-group">
+      <div class="checkbox">
+        <label>
+        <input type="checkbox" name="userId" value="0" th:checked="${param.userId}"> 只显示未分配客户
+        </label>
+      </div>
+      </div>
+      <button type="submit" class="btn btn-info"><i class="fa fa-search"></i> 搜索</button>
+      <a href="?" class="btn btn-default"><i class="fa fa-times"></i> 清空</a>
+    </form>
+  </div>
+</div>
+
+<div id="fp_bx" class="box">
+            <div class="box-header">
+              <div class="text-success">①勾选要分配的客户 <i class="fa fa-angle-double-right text-red"></i> ②选择分配给哪个业务员 <i class="fa fa-angle-double-right text-red"></i> ③确认
+              </div>
+              <div style="margin:10px 0;">
+              <select id="select_admin" class="form-control select2" style="width:220px;">
+              	<option value="">请选择业务员</option>
+              	<option th:value="${admin.id}" th:each="admin,adminStat : ${admins}">[[${admin.username}]] （[[${admin.name}]]）</option>
+              </select>
+              <button class="btn btn-success" id="sub_btn"><i class="fa fa-check"></i> 确认分配</button>
+              </div>
+              <div class="alert alert-success alert-dismissible hide">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <i class="icon fa fa-check"></i> 分配成功
+              </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body no-padding">
+              <table  id="example1" class="table table-striped">
+                <thead>
+                  <tr>
+                    <th><input type="checkbox" id="all_checked"></th>
+                    <th>名称</th>
+                    <th>编号</th>
+                    <th>联系人</th>
+                    <th>地址</th>
+                    <th>巡检状态</th>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+            <!-- /.box-body -->
+          </div>
+</body>
+<footerScript th:remove="tag">
+<script th:src="@{/bower_components/datatables.net/js/jquery.dataTables.min.js}"></script>
+<script th:src="@{/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js}"></script>
+<script th:src="@{/bower_components/select2/dist/js/select2.full.min.js}"></script>
+<script th:src="@{/js/pager_comm.js}"></script>
+<script th:inline="javascript">
+var data=$.fm.createPagerData("/client/list");
+data.controllerBtn=false;
+data.iDisplayLength=50;
+data.setColumns([
+	{"data":null,width:40,"render": function (data, type, row, meta) {
+		var adminId = $("#select_admin").val();
+		return "<input userId=\""+data.userId+"\" value=\""+data.id+"\" "+(data.userId!=0?"disabled title=\"已有分配\"":"")+
+		  (adminId!=""?adminId==data.userId?"checked ":"":"")+" type=\"checkbox\">"}
+	},
+	{"data":"name"},
+	{"data":"number"},
+	{"data":"manager"},
+	{"data":"address"},
+	{"data":null,width:100,"render": function (data, type, row, meta) {
+		var text=data.isChecked==1?"已巡检":"未巡检";
+		return text;
+	}}
+]);
+$(function () {
+	$('#example1').DataTable(data );
+	$('#all_checked').click(function(){
+		if(this.checked){
+			$('#example1').find("input[type=checkbox]").not(':disabled').prop("checked",true);
+		}else{
+			$('#example1').find("input[type=checkbox]").not(':disabled').prop("checked",false);
+		}
+	});
+	$('.select2').select2();
+	$("#sub_btn").click(function(){
+		var adminId = $(".select2").val();
+		if(adminId==""){
+			bootbox.alert("没有选中要分配的业务员");
+			return false;
+		}
+		var inputs = $('#example1').find("input[type=checkbox]:checked").not(':disabled');
+		if(inputs.length==0){
+			bootbox.alert("请选择要分配的客户");
+			return false;
+		}
+		var data={};
+		data.userId=adminId;
+		data.client=[];
+		for(var i=0;i<inputs.length;i++){
+			data.client[i]=inputs.eq(i).val();
+		}
+		//console.log(data);
+		var html="<div class=\"overlay\">\
+        <i class=\"fa fa-refresh fa-spin\"></i>\
+        </div>";
+		$("#fp_bx").append(html);
+		$.ajax({async: false}); 
+		$.post("/client/distribute/manual",data,function(result){
+			if(result){
+				if($.trim(result) == "success"){
+					for(var i=0;i<inputs.length;i++){
+						inputs.eq(i).attr("disabled",true);
+						inputs.eq(i).attr("userId",adminId);
+					}
+					var msg = $($("#fp_bx").find(".alert-success").prop("outerHTML"));
+					msg.removeClass("hide");
+					
+					$("#fp_bx").find(".box-header").append(msg);
+					setTimeout(function(){
+						$(msg).hide(300, function(){ $(this).remove() });
+					},3000);
+				}
+			}
+		});
+		$(".overlay").remove();
+	});
+	$("#select_admin").change(function(){
+		var inputs = $('#example1').find("input[type=checkbox]:disabled");
+		for(var i=0;i<inputs.length;i++){
+			var ipt = inputs.eq(i);
+			if(ipt.attr("userId") == this.value){
+				ipt[0].checked=true;
+			}else{
+				ipt[0].checked=false;
+			}
+		}
+	});
+})
+</script>
+</footerScript>
+</th:block>

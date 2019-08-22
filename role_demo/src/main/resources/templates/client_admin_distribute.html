@@ -1,0 +1,18 @@
+<th:block th:replace="/public/template::iframe(~{::body},~{::footerScript},~{::title})">
+<title>分配业务员</title>
+<body th:remove="tag">
+<div class="box box-info">
+    <div class="box-header with-border">
+      <h3 class="box-title">分配业务员</h3>
+    </div>
+    <div class="box-body">
+      <a th:href="@{/client/distribute/asc}" class="btn btn-info"><i class="fa fa-sort-amount-asc"></i> 顺序平均分配</a>
+      <a th:href="@{/client/distribute/rand}" class="btn btn-warning"><i class="fa fa-random"></i> 随机平均分配</a>
+      <a th:href="@{/client/distribute/list}" class="btn btn-success"><i class="fa fa-hand-o-up"></i> 手动分配</a>
+      <a th:href="@{/client/distribute/clear}" class="btn btn-danger"><i class="fa fa-remove"></i> 清空已分配</a>
+    </div>
+  </div>
+</body>
+<footerScript th:remove="tag">
+</footerScript>
+</th:block>
