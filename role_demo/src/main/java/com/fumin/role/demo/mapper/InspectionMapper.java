@@ -15,4 +15,6 @@ public interface InspectionMapper extends DataMapper<Inspection> {
 	public List<Map<String, Object>> getInspectionToMap(@Param("params") Map<String, Object> params) ;
 	
 	public List<Map<String, Object>> getInspectionGroupToMap(@Param("params") Map<String, Object> params) ;
+	
+	public List<Map<String, Object>> getInspectionTerminalGroupToMap(@Param("params") Map<String, Object> params) ;
 }

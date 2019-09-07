@@ -4,6 +4,7 @@ import com.fumin.role.demo.bean.Client;
 
 public interface ClientService extends BaseService<Client> {
 
+	public void clearInspection(Integer companyId);
 	
 	public void clearDistribute(Integer companyId);
 	public int getClientCountForOneAdmin(Integer companyId);

@@ -4,14 +4,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fumin.role.demo.bean.Admin;
-import com.fumin.role.demo.bean.Client;
 import com.fumin.role.demo.bean.Inspection;
 import com.fumin.role.demo.controller.base.PageController;
-import com.fumin.role.demo.service.ClientService;
+import com.fumin.role.demo.service.InspectionService;
 import com.fumin.role.demo.util.FmException;
 import com.fumin.role.demo.util.ShiroRealm;
 import com.github.pagehelper.PageInfo;
@@ -39,17 +41,13 @@ public class InspectionController extends PageController<Inspection> {
 		if(!valid(t)) {
 			throw new FmException("数据验证失败"); 
 		}
+		
 		Admin admin = (Admin) session.getAttribute(ShiroRealm.ADMIN_SESSION_KEY);
 		t.setUserId(admin.getId());
 		t.setCompanyId(admin.getCompanyId());
 		
 		service.add(t);
 		
-		Client client = new Client();
-		client.setId(t.getClientId());
-		client.setIsChecked(1);
-		ClientService service2 = getService(ClientService.class);
-		service2.update(client);
 		return "redirect:/client/inspection/"+t.getClientId();
 	}
 	
@@ -78,5 +76,58 @@ public class InspectionController extends PageController<Inspection> {
 			entity.put("ORDER_BY", sortName+" "+sortType);
 		}
 		return service.getPageToMap(entity, currePage, pageSize);
+	}
+	
+	@GetMapping("/totals")
+	public String inspectionTotals() {
+		return "inspection_totals";
+	}
+	
+	@PostMapping("/totalslist")
+	@ResponseBody
+	public PageInfo<?> pageTotals(
+			@RequestParam(value="map",required=false)Map<String, Object> entity,
+			@RequestParam(value="page",required=false)Integer currePage,
+			@RequestParam(value="rows",required=false)Integer pageSize,
+			@RequestParam(value="sidx",required=false)String sortName,
+			@RequestParam(value="sord",required=false)String sortType) {
+		if(currePage==null) {
+			currePage=0;
+		}
+		if(pageSize==null) {
+			pageSize=50;
+		}
+		if(entity==null) {
+			entity = new HashMap<>();
+		}
+		
+		if(sortName!=null && sortName.trim().length()>0) {
+			entity.put("ORDER_BY", sortName+" "+sortType);
+		}
+		return ((InspectionService)service).getPageToMapTotals(entity, currePage, pageSize);
+	}
+	
+	@PostMapping("/totalsterminallist")
+	@ResponseBody
+	public PageInfo<?> pageTotalsTerminal(
+			@RequestParam(value="map",required=false)Map<String, Object> entity,
+			@RequestParam(value="page",required=false)Integer currePage,
+			@RequestParam(value="rows",required=false)Integer pageSize,
+			@RequestParam(value="sidx",required=false)String sortName,
+			@RequestParam(value="sord",required=false)String sortType) {
+		if(currePage==null) {
+			currePage=0;
+		}
+		if(pageSize==null) {
+			pageSize=50;
+		}
+		if(entity==null) {
+			entity = new HashMap<>();
+		}
+		
+		if(sortName!=null && sortName.trim().length()>0) {
+			entity.put("ORDER_BY", sortName+" "+sortType);
+		}
+		return ((InspectionService)service).getInspectionTerminalGroupToMap(entity, currePage, pageSize);
 	}
 }

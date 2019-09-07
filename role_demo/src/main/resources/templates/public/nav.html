@@ -19,7 +19,7 @@
       <!-- Optionally, you can add icons to the links -->
       <th:block th:each="nav : ${navs}">
       <shiro:hasPermission name="${nav.id}">
-      <li th:attr="class=${#httpServletRequest.requestURI==nav.url}?'active':''"><a th:href="@{${nav.url}}"><i th:class="${nav.icon}"></i> <span th:text="${nav.name}"></span></a></li>
+      <li th:attr="class=${#httpServletRequest.requestURI==nav.url}?'active':''"><a th:href='@{${nav.url=="/inspection/totals"?"/inspection/totals?addTime_start="+#dates.format(new java.util.Date().getTime(), "yyyy-MM-")+"01":nav.url}}'><i th:class="${nav.icon}"></i> <span th:text="${nav.name}"></span></a></li>
       </shiro:hasPermission>
       </th:block>
     </ul>

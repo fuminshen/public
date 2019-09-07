@@ -1,5 +1,6 @@
 <th:block th:replace="/public/template::iframe(~{::body},~{::footerScript},~{::title})">
 <title>客户列表</title>
+<link rel="stylesheet" th:href="@{/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css}">
 <body th:remove="tag">
 
 <div class="box box-info">
@@ -24,6 +25,28 @@
         <div class="input-group-addon">编号</div>
         <input type="text" class="form-control" name="number" th:value="${param.number}">
       </div>
+      </div>
+      
+      <div class="form-group">
+        <label>开始时间</label>
+
+        <div class="input-group date">
+          <div class="input-group-addon">
+            <i class="fa fa-calendar"></i>
+          </div>
+          <input type="text" class="form-control pull-right datepicker" name="addTime_start" th:value="${param.addTime_start}" autocomplete="off">
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label>截止时间</label>
+
+        <div class="input-group date">
+          <div class="input-group-addon">
+            <i class="fa fa-calendar"></i>
+          </div>
+          <input type="text" class="form-control pull-right datepicker" name="addTime_end" th:value="${param.addTime_end}" autocomplete="off">
+        </div>
       </div>
       <button type="submit" class="btn btn-info"><i class="fa fa-search"></i> 搜索</button>
       <a href="?" class="btn btn-default"><i class="fa fa-times"></i> 清空</a>
@@ -51,6 +74,9 @@
 <script th:src="@{/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js}"></script>
 <script th:src="@{/js/pager_comm.js}"></script>
 
+<script th:src="@{/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js}"></script>
+<script th:src="@{/bower_components/bootstrap-datepicker/dist/locales/bootstrap-datepicker.zh-CN.min.js}"></script>
+
 <script th:inline="javascript">
 var data=$.fm.createPagerData("/client/inspection");
 data.controllerBtn=false;
@@ -76,6 +102,14 @@ data.fnCreatedRow=function( nRow, aData, iDataIndex ){
 }
 $(function () {
 	$('#example1').DataTable(data );
+	$('.datepicker').datepicker({
+      autoclose: true,
+      language:  'zh-CN',
+      clearBtn:true,
+      todayHighlight: 1,   //高亮今日日期
+      orientation:'bottom'
+
+    });
 })
 </script>
 </footerScript>

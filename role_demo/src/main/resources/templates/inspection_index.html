@@ -1,5 +1,6 @@
 <th:block th:replace="/public/template::iframe(~{::body},~{::footerScript},~{::title})">
 <link rel="stylesheet" th:href="@{/bower_components/select2/dist/css/select2.min.css}">
+<link rel="stylesheet" th:href="@{/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css}">
 <title>巡检记录</title>
 <body th:remove="tag">
 
@@ -15,16 +16,25 @@
   <div class="box-body">
     <form id="searchFrm">
       <div class="form-group">
-    	<div class="input-group">
-        <div class="input-group-addon">客户名称</div>
-        <input type="text" class="form-control" name="name_like" th:value="${param.name_like}">
+        <label>开始时间</label>
+
+        <div class="input-group date">
+          <div class="input-group-addon">
+            <i class="fa fa-calendar"></i>
+          </div>
+          <input type="text" class="form-control pull-right datepicker" name="addTime_start" th:value="${param.addTime_start}" autocomplete="off">
+        </div>
       </div>
-      </div>
+      
       <div class="form-group">
-      <div class="input-group">
-        <div class="input-group-addon">客户编号</div>
-        <input type="text" class="form-control" name="number" th:value="${param.number}">
-      </div>
+        <label>截止时间</label>
+
+        <div class="input-group date">
+          <div class="input-group-addon">
+            <i class="fa fa-calendar"></i>
+          </div>
+          <input type="text" class="form-control pull-right datepicker" name="addTime_end" th:value="${param.addTime_end}" autocomplete="off">
+        </div>
       </div>
       <button type="submit" class="btn btn-info"><i class="fa fa-search"></i> 搜索</button>
       <a href="?" class="btn btn-default"><i class="fa fa-times"></i> 清空</a>
@@ -38,11 +48,13 @@
             </div>
             <!-- /.box-header -->
             <div class="box-body no-padding">
-              <table  id="example1" class="table table-striped">
+              <table  id="example1" class="table table-striped" style="min-width:800px">
                 <thead>
                   <tr>
-                    <th>名称</th>
-                    <th>编号</th>
+                    <th>客户名称</th>
+                    <th>客户编号</th>
+                    <th>终端编号</th>
+                    <th>POS编号</th>
                     <th>联系人</th>
                     <th>地址</th>
                     <th>巡检类型</th>
@@ -58,6 +70,12 @@
 <script th:src="@{/bower_components/datatables.net/js/jquery.dataTables.min.js}"></script>
 <script th:src="@{/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js}"></script>
 <script th:src="@{/bower_components/select2/dist/js/select2.full.min.js}"></script>
+
+<script th:src="@{/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js}"></script>
+<script th:src="@{/bower_components/bootstrap-datepicker/dist/locales/bootstrap-datepicker.zh-CN.min.js}"></script>
+
+<script th:src="@{/bower_components/moment/min/moment.min.js}"></script>
+
 <script th:src="@{/js/pager_comm.js}"></script>
 <script th:inline="javascript">
 var data=$.fm.createPagerData("/inspection/list");
@@ -65,17 +83,32 @@ data.controllerBtn=false;
 data.iDisplayLength=50;
 data.setColumns([
 	{"data":"name"},
-	{"data":"number"},
+	{"data":"clientNumber"},
+	{"data":null,"render":function (data, type, row, meta) {
+		var text=data.number==null?"<span class='text-danger'>已更换或已拆机</span>":data.number;
+		return text;
+	}},
+	{"data":"posNumber"},
 	{"data":"manager"},
 	{"data":"address"},
 	{"data":null,width:100,"render": function (data, type, row, meta) {
 		//1已巡检，2新安装，3已维修
-		var text=data.type==1?"已巡检":data.type==2?"新安装":"已维修";
+		var text=data.type==1?"已巡检":data.type==2?"新安装":data.type==3?"已维修":"已更换";
 		return text;
 	}},
-	{"data":"time"}
+	{"data":null,"width":110,"render":function (data, type, row, meta) {
+		var text=moment(data.time).format("YYYY-MM-DD");
+		return text;
+	}}
 ]);
 $(function () {
+	$('.datepicker').datepicker({
+		autoclose: true,
+		language:  'zh-CN',
+		clearBtn:true,
+		todayHighlight: 1,   //高亮今日日期
+		orientation:'bottom'
+    });
 	$('#example1').DataTable(data );
 	$('#all_checked').click(function(){
 		if(this.checked){

@@ -6,6 +6,7 @@ import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -93,7 +94,7 @@ public abstract class PageController<T> extends SuperController<T> {
 		if(pageSize==null) {
 			pageSize=50;
 		}
-		if(sortName!=null && sortName.trim().length()>0) {
+		if( !StringUtils.isEmpty(sortName) ) {
 			if(entity==null) {
 				entity = new HashMap<>();
 			}

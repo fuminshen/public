@@ -10,6 +10,8 @@ import com.fumin.role.demo.util.DataMapper;
 
 @Mapper
 public interface ClientMapper extends DataMapper<Client> {
+	
+	public void clearInspection(@Param("companyId") Integer companyId);
 
 	public void setDistributeClear(@Param("companyId") Integer companyId);
 	

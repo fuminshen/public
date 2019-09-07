@@ -16,7 +16,7 @@ public class CompanyController extends PageController<Company> {
 	@Override
 	public boolean valid(Company t) {
 		if(t.getName()==null || t.getName().trim().length()==0) {
-			throw new FmException("公司名不能为空");
+			throw new FmException("地区名不能为空");
 		}
 		return true;
 	}

@@ -18,7 +18,6 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.fumin.role.demo.bean.Admin;
-import com.fumin.role.demo.util.FmException;
 import com.fumin.role.demo.util.ShiroRealm;
 
 /**
@@ -34,7 +33,7 @@ public class CompanyValidAop {
     public void serviceAop(){}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	//@Around("serviceAop()")
+	@Around("serviceAop()")
 	public Object before(ProceedingJoinPoint joinPoint) throws Throwable{
 		ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpSession session = attributes.getRequest().getSession();
@@ -43,7 +42,7 @@ public class CompanyValidAop {
         
         Admin admin1 = (Admin) session.getAttribute(ShiroRealm.ADMIN_SESSION_KEY);
         if(admin1==null) {
-        	throw new FmException("登录信息错误");
+        	return joinPoint.proceed(joinPoint.getArgs());
         }else {
         	companyId = admin1.getCompanyId();
         }

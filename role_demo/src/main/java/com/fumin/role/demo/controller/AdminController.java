@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fumin.role.demo.bean.Admin;
+import com.fumin.role.demo.bean.Company;
 import com.fumin.role.demo.bean.Role;
 import com.fumin.role.demo.controller.base.PageController;
+import com.fumin.role.demo.service.impl.CompanyServiceImpl;
 import com.fumin.role.demo.service.impl.RoleServiceImpl;
 import com.fumin.role.demo.util.FmException;
 import com.fumin.role.demo.util.ShiroRealm;
@@ -99,16 +101,23 @@ public class AdminController extends PageController<Admin> {
 	@GetMapping("/get/{id}")
 	@Override
 	public ModelAndView get(@PathVariable("id") Serializable id) {
-		RoleServiceImpl roleService = getService(RoleServiceImpl.class);
-		List<Role> roles = roleService.getByEntity(null);
-		request.setAttribute("roles", roles);
-		
 		Object o = service.get(id);
 		if(o==null) {
 			throw new FmException("数据不存在");
 		}
+		
+		//获取地区列表
+		CompanyServiceImpl companyService = getService(CompanyServiceImpl.class);
+		List<Company> companys = companyService.getByEntity(null);
+		
+		//获取权限分组列表
+		RoleServiceImpl roleService = getService(RoleServiceImpl.class);
+		List<Role> roles = roleService.getByEntity(null);
+		
 		ModelAndView model=new ModelAndView("admin_info");
 		model.addObject("vo",o);
+		model.addObject("roles", roles);
+		model.addObject("companys", companys);
 		return model;
 	}
 	
@@ -118,6 +127,11 @@ public class AdminController extends PageController<Admin> {
 		RoleServiceImpl roleService = getService(RoleServiceImpl.class);
 		List<Role> roles = roleService.getByEntity(null);
 		request.setAttribute("roles", roles);
+		
+		CompanyServiceImpl companyService = getService(CompanyServiceImpl.class);
+		List<Company> companys = companyService.getByEntity(null);
+		
+		request.setAttribute("companys", companys);
 		return super.news();
 	}
 }

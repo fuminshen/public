@@ -2,24 +2,21 @@ package com.fumin.role.demo.bean;
 
 import java.sql.Timestamp;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 import lombok.Data;
 
 /**
- * POS设备终端
+ * 已经被删除的POS设备终端，保留数据
  * @author fumin
  *
  */
 @Data
-@Table(name = "g_terminal")
-public class Terminal {
+@Table(name = "g_terminal_old")
+public class TerminalOld {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private String number;            //终端编码
 	private String posNumber;         //POS号

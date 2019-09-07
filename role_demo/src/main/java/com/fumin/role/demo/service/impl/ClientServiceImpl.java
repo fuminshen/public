@@ -20,6 +20,11 @@ public class ClientServiceImpl extends BaseServiceImpl<Client> implements Client
 	protected ClientMapper mapper;
 
 	@Override
+	public void clearInspection(Integer companyId) {
+		mapper.clearInspection(companyId);
+	}
+	
+	@Override
 	public int getClientCountForOneAdmin(Integer companyId) {
 		return mapper.selectClientCountForOneAdmin(companyId);
 	}
@@ -81,4 +86,5 @@ public class ClientServiceImpl extends BaseServiceImpl<Client> implements Client
 		}
 		mapper.updateDistributeForManual(companyId, userId, ids);
 	}
+
 }

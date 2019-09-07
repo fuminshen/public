@@ -5,21 +5,22 @@
 	
 <mapper namespace="com.fumin.role.demo.mapper.InspectionMapper">
 	<select id="getInspectionToMap" resultType="map">
-		select b.*,a.time,a.type,a.userId from g_inspection a inner join g_client b on b.id=a.clientId
+		select a.number,a.posNumber,c.id,c.time,c.type,b.number as clientNumber,b.name,b.phone,b.manager,b.address 
+		from g_inspection c left join g_terminal a on a.id=c.terminalId left join g_client b on b.id=c.clientId left join g_admins e on e.id=a.userId 
 		<if test="params != null">
 			<where>
 				<foreach collection="params" item="value" index="key">
 					<choose>
 						<when test='key == "addTime_start"'>
-							and a.time &gt;= #{value}
+							and c.time &gt;= #{value}
 						</when>
 						<otherwise>
 							<choose>
 								<when test='key == "addTime_end"'>
-									and a.time &lt;= #{value}
+									and c.time &lt;= #{value}
 								</when>
 								<otherwise>
-									and a.${key} = #{value}
+									and c.${key} = #{value}
 								</otherwise>
 							</choose>
 						</otherwise>
@@ -27,37 +28,80 @@
 				</foreach>
 			</where>
 		</if>
-		order by a.time desc
+		order by c.time desc
 	</select>
 	
-	<select id="">
+	<select id="getInspectionGroupToMap" resultType="map">
 		select a.*,b.time,c.name as adminName,c.username,
 		sum(case when b.type=1 then 1 else 0 end) as xj,
 		sum(case when b.type=2 then 1 else 0 end) as xz,
 		sum(case when b.type=3 then 1 else 0 end) as wx 
-		from g_client a left join g_inspection b on b.clientId=a.id 
-		left join g_admins c on c.id=b.userId
+		from g_client a left join (select * from g_inspection 
 		<if test="params != null">
 			<where>
 				<foreach collection="params" item="value" index="key">
 					<choose>
 						<when test='key == "addTime_start"'>
-							and a.time &gt;= #{value}
+							and time &gt;= #{value}
 						</when>
 						<otherwise>
-							<choose>
-								<when test='key == "addTime_end"'>
-									and a.time &lt;= #{value}
-								</when>
-								<otherwise>
-									and a.${key} = #{value}
-								</otherwise>
-							</choose>
+							<if test='key == "addTime_end"'>
+								and time &lt;= #{value}
+							</if>
 						</otherwise>
 					</choose>
 				</foreach>
 			</where>
 		</if>
+		) b on b.clientId=a.id 
+		left join g_admins c on c.id=a.userId
+		<if test="params != null">
+			<where>
+				<foreach collection="params" item="value" index="key">
+					<if test='key != "addTime_start" and key != "addTime_end"'>
+					and ${key} = #{value}
+					</if>
+				</foreach>
+			</where>
+		</if>
 		group by a.id
+	</select>
+	
+	<select id="getInspectionTerminalGroupToMap" resultType="map">
+		select a.*,b.number as clientNumber,b.name,b.phone,b.manager,b.address,
+		e.name as adminName,e.username,
+		sum(case when c.type=1 then 1 else 0 end) as xj,
+		sum(case when c.type=2 then 1 else 0 end) as xz,
+		sum(case when c.type=3 then 1 else 0 end) as wx,
+		sum(case when c.type=4 then 1 else 0 end) as gh  
+		from g_terminal a left join g_client b on b.id=a.clientId left join g_admins e on e.id=a.userId left join
+		(select * from g_inspection
+		<if test="params != null">
+			<where>
+				<foreach collection="params" item="value" index="key">
+					<choose>
+						<when test='key == "addTime_start"'>
+							and time &gt;= #{value}
+						</when>
+						<otherwise>
+							<if test='key == "addTime_end"'>
+								and time &lt;= #{value}
+							</if>
+						</otherwise>
+					</choose>
+				</foreach>
+			</where>
+		</if>
+		) c on c.terminalId=a.id 
+		<if test="params != null">
+			<where>
+				<foreach collection="params" item="value" index="key">
+					<if test='key != "addTime_start" and key != "addTime_end"'>
+					and a.${key} = #{value}
+					</if>
+				</foreach>
+			</where>
+		</if>
+		 group by a.id
 	</select>
 </mapper>

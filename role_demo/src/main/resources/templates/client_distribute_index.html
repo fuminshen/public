@@ -41,8 +41,11 @@
 
 <div id="fp_bx" class="box">
             <div class="box-header">
-              <div class="text-success">①勾选要分配的客户 <i class="fa fa-angle-double-right text-red"></i> ②选择分配给哪个业务员 <i class="fa fa-angle-double-right text-red"></i> ③确认
+              <div class="text-success">操作步骤：①勾选要分配的客户 <i class="fa fa-angle-double-right text-red"></i> ②选择分配给哪个业务员 <i class="fa fa-angle-double-right text-red"></i> ③确认
               </div>
+              <div class="text-danger">不可选的复选框说明该客户已经分配给其他业务员，可以<a id="resetcbx" href="#">点击这里</a>进行强行分配。
+              </div>
+              
               <div style="margin:10px 0;">
               <select id="select_admin" class="form-control select2" style="width:220px;">
               	<option value="">请选择业务员</option>
@@ -150,7 +153,7 @@ $(function () {
 		$(".overlay").remove();
 	});
 	$("#select_admin").change(function(){
-		var inputs = $('#example1').find("input[type=checkbox]:disabled");
+		var inputs = $('#example1').find("input[type=checkbox]");
 		for(var i=0;i<inputs.length;i++){
 			var ipt = inputs.eq(i);
 			if(ipt.attr("userId") == this.value){
@@ -159,6 +162,9 @@ $(function () {
 				ipt[0].checked=false;
 			}
 		}
+	});
+	$("#resetcbx").click(function(){
+		$('#example1').find("input[type=checkbox]:disabled").attr("disabled",false);
 	});
 })
 </script>

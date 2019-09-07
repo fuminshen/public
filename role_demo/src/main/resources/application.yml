@@ -1,7 +1,9 @@
 server:
   port: 80
+  max-http-header-size: 8192
   tomcat:
     uri-encoding: UTF-8
+  
 mybatis:
   configuration:
     map-underscore-to-camel-case: false

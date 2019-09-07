@@ -6,13 +6,38 @@
       <h3 class="box-title">分配业务员</h3>
     </div>
     <div class="box-body">
-      <a th:href="@{/client/distribute/asc}" class="btn btn-info"><i class="fa fa-sort-amount-asc"></i> 顺序平均分配</a>
-      <a th:href="@{/client/distribute/rand}" class="btn btn-warning"><i class="fa fa-random"></i> 随机平均分配</a>
-      <a th:href="@{/client/distribute/list}" class="btn btn-success"><i class="fa fa-hand-o-up"></i> 手动分配</a>
-      <a th:href="@{/client/distribute/clear}" class="btn btn-danger"><i class="fa fa-remove"></i> 清空已分配</a>
+      <div>客户分配是将客户分配给对应的业务员，让业务员去维护。</div>
+      <div class="text-success">鼠标放置在按钮上方静止将会弹出说明</div>
+      
+      <h4>自动分配</h4>
+      <div class="text-danger">自动分配将会清空以前已分配的数据，将所有业务员和客户重新分配。数据量较大的情况下该操作耗时较长，请耐心等待</div>
+      <a th:href="@{/client/distribute/asc}" class="btn btn-info" title="将业务员和客户按顺序从头到尾逐个分配"><i class="fa fa-sort-amount-asc"></i> 顺序平均分配</a>
+      <a th:href="@{/client/distribute/rand}" class="btn btn-warning" title="将业务员和客户打乱顺序随机分配，较顺序分配更慢更耗时"><i class="fa fa-random"></i> 随机平均分配</a>
+      
+      <h4>手动分配</h4>
+      <a th:href="@{/client/distribute/list}" class="btn btn-success" title="进入手动分配界面，操作人对客户进行手动的逐个分配"><i class="fa fa-hand-o-up"></i> 进入手动分配</a>
+      
+      <h4>状态重置</h4>
+      <a th:href="@{/client/distribute/clear}" class="btn btn-danger" title="将所有分配好业务员的客户全部重置成未分配状态"><i class="fa fa-remove"></i> 清空已分配</a>
+      <a th:href="@{/client/inspection/clear}" class="btn btn-default" title="将所有已巡检的客户重置为未巡检，本操作只重置客户状态，以前的业务员巡检记录不会被删除"><i class="fa fa-trash"></i> 重置巡检状态</a>
+      
+      
     </div>
   </div>
 </body>
 <footerScript th:remove="tag">
+<script>
+$(function(){
+	$(".box-body a").not(".btn-success").click(function(){
+		var url = this.href;
+		bootbox.confirm("是否确认？",function(b){
+			if(b){
+				location.href=url+"?d="+new Date().getTime();
+			}
+		});
+		return false;
+	});
+});
+</script>
 </footerScript>
 </th:block>

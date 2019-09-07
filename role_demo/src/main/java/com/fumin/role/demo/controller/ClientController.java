@@ -37,6 +37,11 @@ public class ClientController extends PageController<Client> {
 		if(StringUtils.isEmpty(t.getName())) {
 			throw new FmException("名称不能为空");
 		}
+		Admin admin = getLoginUser();
+		if(admin.getCompanyId()<=1) {
+			throw new FmException("总地区的账号只能用于查看数据，不能用于编辑数据");
+		}
+		t.setCompanyId(admin.getCompanyId());
 		return true;
 	}
 	
@@ -45,8 +50,11 @@ public class ClientController extends PageController<Client> {
 	public String add(Client t) {
 		String tnumber=request.getParameter("tnumber");
 		String tStr = request.getParameter("t");
-		if( StringUtils.isEmpty(tnumber) && StringUtils.isEmpty(tStr) ) {
-			throw new FmException("添加终端时，终端编号不能为空");
+		String posNumber = request.getParameter("tposNumber");
+		if( !StringUtils.isEmpty(tStr) ) {
+			if( StringUtils.isEmpty(tnumber) || StringUtils.isEmpty(posNumber) ) {
+				throw new FmException("添加终端时，终端编号不能为空");
+			}
 		}
 		
 		super.add(t);
@@ -55,6 +63,7 @@ public class ClientController extends PageController<Client> {
 			Terminal ter = new Terminal();
 			ter.setClientId(t.getId());
 			ter.setNumber(tnumber);
+			ter.setPosNumber(posNumber);
 			service2.add(ter);
 		}
 		if( !StringUtils.isEmpty(tStr) ) {
@@ -107,6 +116,17 @@ public class ClientController extends PageController<Client> {
 		}
 		((ClientService)service).setDistributeRand(companyId);
 		request.setAttribute("msg", "客户已随机平均分配完毕");
+		return "public/success";
+	}
+	@GetMapping("/inspection/clear")
+	public String clearInspection() {
+		Admin admin = (Admin) session.getAttribute(ShiroRealm.ADMIN_SESSION_KEY);
+		Integer companyId=null;
+		if(admin.getCompanyId()!=null && admin.getCompanyId()>0) {
+			companyId=admin.getCompanyId();
+		}
+		((ClientService)service).clearInspection(companyId);
+		request.setAttribute("msg", "巡检状态已全部归零");
 		return "public/success";
 	}
 	
@@ -171,6 +191,11 @@ public class ClientController extends PageController<Client> {
 	public ModelAndView inspectionGetOne(@PathVariable("id")Serializable id) {
 		ModelAndView m = super.get(id);
 		m.setViewName("client_inspection_info");
+		BaseService<Terminal> tSer = getService(TerminalServiceImpl.class);
+		Terminal t= new Terminal();
+		t.setClientId(Integer.parseInt(id.toString()));
+		List<Terminal> tList = tSer.getByEntity(t);
+		m.addObject("terminals", tList);
 		return m;
 	}
 }
