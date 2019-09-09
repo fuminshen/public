@@ -25,7 +25,6 @@ import com.fumin.role.demo.service.BaseService;
 import com.fumin.role.demo.service.ClientService;
 import com.fumin.role.demo.service.impl.TerminalServiceImpl;
 import com.fumin.role.demo.util.FmException;
-import com.fumin.role.demo.util.ShiroRealm;
 import com.github.pagehelper.PageInfo;
 
 @Controller
@@ -34,14 +33,14 @@ public class ClientController extends PageController<Client> {
 
 	@Override
 	public boolean valid(Client t) {
-		if(StringUtils.isEmpty(t.getName())) {
-			throw new FmException("名称不能为空");
-		}
 		Admin admin = getLoginUser();
 		if(admin.getCompanyId()<=1) {
 			throw new FmException("总地区的账号只能用于查看数据，不能用于编辑数据");
 		}
 		t.setCompanyId(admin.getCompanyId());
+		if(StringUtils.isEmpty(t.getName())) {
+			throw new FmException("名称不能为空");
+		}
 		return true;
 	}
 	
@@ -86,46 +85,42 @@ public class ClientController extends PageController<Client> {
 	
 	@GetMapping("/distribute/clear")
 	public String clearDistribute() {
-		Admin admin = (Admin) session.getAttribute(ShiroRealm.ADMIN_SESSION_KEY);
-		Integer companyId=null;
-		if(admin.getCompanyId()!=null && admin.getCompanyId()>0) {
-			companyId=admin.getCompanyId();
+		Admin admin = getLoginUser();
+		if(admin.getCompanyId()==null || admin.getCompanyId()<=1) {
+			throw new FmException("总地区的账号不能分配任务，请用具体地区的账号分配任务");
 		}
-		((ClientService)service).clearDistribute(companyId);
+		((ClientService)service).clearDistribute(admin.getCompanyId());
 		request.setAttribute("msg", "已分配的客户全部清空");
 		return "public/success";
 	}
 	
 	@GetMapping("/distribute/asc")
 	public String setDistributeAsc() {
-		Admin admin = (Admin) session.getAttribute(ShiroRealm.ADMIN_SESSION_KEY);
-		Integer companyId=null;
-		if(admin.getCompanyId()!=null && admin.getCompanyId()>0) {
-			companyId=admin.getCompanyId();
+		Admin admin = getLoginUser();
+		if(admin.getCompanyId()==null || admin.getCompanyId()<=1) {
+			throw new FmException("总地区的账号不能分配任务，请用具体地区的账号分配任务");
 		}
-		((ClientService)service).setDistributeAsc(companyId);
+		((ClientService)service).setDistributeAsc(admin.getCompanyId());
 		request.setAttribute("msg", "客户已按顺序平均分配完毕");
 		return "public/success";
 	}
 	@GetMapping("/distribute/rand")
 	public String setDistributeRand() {
-		Admin admin = (Admin) session.getAttribute(ShiroRealm.ADMIN_SESSION_KEY);
-		Integer companyId=null;
-		if(admin.getCompanyId()!=null && admin.getCompanyId()>0) {
-			companyId=admin.getCompanyId();
+		Admin admin = getLoginUser();
+		if(admin.getCompanyId()==null || admin.getCompanyId()<=1) {
+			throw new FmException("总地区的账号不能分配任务，请用具体地区的账号分配任务");
 		}
-		((ClientService)service).setDistributeRand(companyId);
+		((ClientService)service).setDistributeRand(admin.getCompanyId());
 		request.setAttribute("msg", "客户已随机平均分配完毕");
 		return "public/success";
 	}
 	@GetMapping("/inspection/clear")
 	public String clearInspection() {
-		Admin admin = (Admin) session.getAttribute(ShiroRealm.ADMIN_SESSION_KEY);
-		Integer companyId=null;
-		if(admin.getCompanyId()!=null && admin.getCompanyId()>0) {
-			companyId=admin.getCompanyId();
+		Admin admin = getLoginUser();
+		if(admin.getCompanyId()==null || admin.getCompanyId()<=1) {
+			throw new FmException("总地区的账号不能分配任务，请用具体地区的账号分配任务");
 		}
-		((ClientService)service).clearInspection(companyId);
+		((ClientService)service).clearInspection(admin.getCompanyId());
 		request.setAttribute("msg", "巡检状态已全部归零");
 		return "public/success";
 	}
@@ -133,7 +128,7 @@ public class ClientController extends PageController<Client> {
 	@GetMapping("/distribute/list")
 	public String distributeManualList() {
 		AdminService adminService = getService(AdminService.class);
-		Admin self = (Admin) session.getAttribute(ShiroRealm.ADMIN_SESSION_KEY);
+		Admin self = getLoginUser();
 		Admin admin = new Admin();
 		admin.setRole(3);
 		if(self.getCompanyId()!=null && self.getCompanyId()>0) {
@@ -147,13 +142,12 @@ public class ClientController extends PageController<Client> {
 	@PostMapping("/distribute/manual")
 	@ResponseBody
 	public String distributeManual(@RequestParam("userId")Integer userId,@RequestParam(value = "client[]") String[] clientId) {
-		Admin admin = (Admin) session.getAttribute(ShiroRealm.ADMIN_SESSION_KEY);
-		Integer companyId=null;
-		if(admin.getCompanyId()!=null && admin.getCompanyId()>0) {
-			companyId=admin.getCompanyId();
+		Admin admin = getLoginUser();
+		if(admin.getCompanyId()==null || admin.getCompanyId()<=1) {
+			throw new FmException("总地区的账号不能分配任务，请用具体地区的账号分配任务");
 		}
 		
-		((ClientService)service).setDistributeManual(companyId,userId,clientId);
+		((ClientService)service).setDistributeManual(admin.getCompanyId(),userId,clientId);
 		return "success";
 	}
 	
@@ -174,7 +168,7 @@ public class ClientController extends PageController<Client> {
 		if(entity==null) {
 			entity = new HashMap<>();
 		}
-		Admin admin = (Admin) session.getAttribute(ShiroRealm.ADMIN_SESSION_KEY);
+		Admin admin = getLoginUser();
 		entity.put("userId", admin.getId());
 		if(sortName!=null && sortName.trim().length()>0) {
 			entity.put("ORDER_BY", sortName+" "+sortType);

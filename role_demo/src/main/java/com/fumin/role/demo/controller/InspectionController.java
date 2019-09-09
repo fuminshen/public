@@ -1,6 +1,7 @@
 package com.fumin.role.demo.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Controller;
@@ -11,9 +12,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fumin.role.demo.bean.Admin;
+import com.fumin.role.demo.bean.Company;
 import com.fumin.role.demo.bean.Inspection;
 import com.fumin.role.demo.controller.base.PageController;
+import com.fumin.role.demo.service.AdminService;
 import com.fumin.role.demo.service.InspectionService;
+import com.fumin.role.demo.service.impl.CompanyServiceImpl;
 import com.fumin.role.demo.util.FmException;
 import com.fumin.role.demo.util.ShiroRealm;
 import com.github.pagehelper.PageInfo;
@@ -80,6 +84,21 @@ public class InspectionController extends PageController<Inspection> {
 	
 	@GetMapping("/totals")
 	public String inspectionTotals() {
+		CompanyServiceImpl service2 = getService(CompanyServiceImpl.class);
+		Company c = new Company();
+		List<Company> companys = service2.getByEntity(c);
+		request.setAttribute("companys", companys);
+		
+		AdminService service3 = getService(AdminService.class);
+		Admin a = new Admin();
+		a.setRole(3);
+		Admin admin = getLoginUser();
+		if(admin.getCompanyId()>1) {
+			a.setCompanyId(admin.getCompanyId());
+		}
+		List<Admin> admins = service3.getByEntity(a);
+		request.setAttribute("admins", admins);
+		
 		return "inspection_totals";
 	}
 	

@@ -57,6 +57,14 @@ public class AdminController extends PageController<Admin> {
 		if(!t.getPassword().equals(repass)) {
 			throw new FmException("两次输入的密码不一致");
 		}
+		Admin admin = getLoginUser();
+		if(admin.getCompanyId()>1) {
+			t.setCompanyId(admin.getCompanyId());
+		}else {
+			if(t.getCompanyId()==null || t.getCompanyId()<1) {
+				throw new FmException("没有设定所属地区");
+			}
+		}
 		return super.add(t);
 	}
 	

@@ -69,12 +69,13 @@
 	
 	<select id="getInspectionTerminalGroupToMap" resultType="map">
 		select a.*,b.number as clientNumber,b.name,b.phone,b.manager,b.address,
-		e.name as adminName,e.username,
+		e.name as adminName,e.username,d.name as diqu,
 		sum(case when c.type=1 then 1 else 0 end) as xj,
 		sum(case when c.type=2 then 1 else 0 end) as xz,
 		sum(case when c.type=3 then 1 else 0 end) as wx,
 		sum(case when c.type=4 then 1 else 0 end) as gh  
 		from g_terminal a left join g_client b on b.id=a.clientId left join g_admins e on e.id=a.userId left join
+		g_company d on d.id=b.companyId left join
 		(select * from g_inspection
 		<if test="params != null">
 			<where>
@@ -97,7 +98,14 @@
 			<where>
 				<foreach collection="params" item="value" index="key">
 					<if test='key != "addTime_start" and key != "addTime_end"'>
-					and a.${key} = #{value}
+						<choose>
+							<when test='key =="companyId"'>
+								and b.${key} = #{value}
+							</when>
+							<otherwise>
+								and a.${key} = #{value}
+							</otherwise>
+						</choose>
 					</if>
 				</foreach>
 			</where>
