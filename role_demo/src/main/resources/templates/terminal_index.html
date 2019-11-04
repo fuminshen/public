@@ -1,7 +1,7 @@
-<th:block th:replace="/public/template::iframe(~{::body},~{::footerScript},~{::title})">
+<th:block th:replace="public/template::iframe(~{::body},~{::footerScript},~{::title})">
 <title>终端列表</title>
 <body th:remove="tag">
-<div th:class="${param.clientId!=null?'hide':'box box-info'}" >
+<div th:class="${(param.clientId!=null && !#strings.isEmpty(param.clientId) )?'hide':'box box-info'}" >
   <div class="box-header with-border">
     <h3 class="box-title">搜索条件</h3>
 

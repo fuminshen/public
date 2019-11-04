@@ -15,32 +15,23 @@ mybatis:
 
 mapper:
   style: normal
-#  mappers:
-#  - com.ipc.aqj.free.util.DataMapper
 
 logging:
   level:
-    com.fumin.role.demo: debug
+    com.fumin.role.demo: warning
   
 spring:
   thymeleaf:
     cache: false
     encoding: UTF8
-    
-#  freemarker: 
-#    content-type: text/html;
-#    charset: UTF-8
-#    cache: false
-#    check-template-location: true
-#    expose-request-attributes: true
-#    expose-session-attributes: true
-#    request-context-attribute: request
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML
   http:
     encoding:
       charset: UTF-8
       enabled: true
   datasource:
-    #type: com.alibaba.druid.pool.DruidDataSource
     url: jdbc:mysql://localhost:3306/jianhang_pos?useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8
     username: root
     password: 1234
@@ -50,16 +41,3 @@ spring:
     favicon:
       #关闭自带的icon图标
       enabled: false
-      #druid开启后台监控配置
-#      web-stat-filter:
-#        enabled: true
-#        url-pattern: /*
-#        exclusions: /druid/*,*.js,*.gif,*.jpg,*.bmp,*.png,*.css,*.ico
-#        session-stat-enable: true
-#        session-stat-max-count: 10
-#      stat-view-servlet:
-#        enabled: true
-#        url-pattern: /druid/*
-#        reset-enable: true
-#        login-username: admin
-#        login-password: admin

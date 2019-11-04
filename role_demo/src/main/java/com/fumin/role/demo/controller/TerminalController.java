@@ -8,6 +8,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.fumin.role.demo.bean.Admin;
 import com.fumin.role.demo.bean.Terminal;
@@ -66,7 +67,12 @@ public class TerminalController extends PageController<Terminal> {
 	}
 	
 	@Override
-	public PageInfo<?> page(Map<String, Object> entity, Integer currePage, Integer pageSize, String sortName, String sortType) {
+	public PageInfo<?> page(
+			@RequestParam(value="map",required=false)Map<String, Object> entity, 
+			@RequestParam(value="page",required=false)Integer currePage, 
+			@RequestParam(value="rows",required=false)Integer pageSize, 
+			@RequestParam(value="sidx",required=false)String sortName, 
+			@RequestParam(value="sord",required=false)String sortType) {
 		if(currePage==null) {
 			currePage=0;
 		}

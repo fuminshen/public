@@ -81,6 +81,7 @@ jQuery.fm={
 		        type: "POST",
 		        async:true,
 		        success: function (result) {
+		        	console.log(aoDt);
 		        	var dt = {};
 		        	if(result){
 		        		if(result.list){
@@ -111,7 +112,7 @@ jQuery.fm={
 					var frmid = "frm_"+data.id+"_"+meta.settings.nTable.id;
 					return "<form id='"+frmid+"' method='post' action='"+url+"/delete'><input name='id' value='"+data.id+"' type='hidden'>"+
 					"<a href='"+url+"/get/"+data.id+"' title='编辑'><i class='fa fa-edit'></i></a> "+
-					(btnText?btnText.replace("#id",data.id):"") +
+					(btnText?btnText.replace(/#id/g,data.id):"") +
 					"<button type='button' class='btn-link' style='margin:0;padding:0' title='删除' onclick='bootbox.confirm(\"删除后不可恢复，是否确认？\",function(b){if(b){$(\"#"+frmid+"\").submit();}});'><i class='fa fa-remove text-red'></i></button></form>"}
 				};
 				if(this.controllerWidth){

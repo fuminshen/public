@@ -1,7 +1,6 @@
-
 <!DOCTYPE html>
 <html>
-  <head th:replace="/public/header :: common_header(~{::title},~{::link},~{})">
+  <head th:replace="public/header :: common_header(~{::title},~{::link},~{})">
     <title>登录</title>
     <link rel="stylesheet" th:href="@{/plugins/iCheck/square/blue.css}">
   </head>
@@ -44,7 +43,7 @@
 </div>
 <!-- /.login-box -->
 
-<th:block th:replace="/public/footer :: footer(~{})"/>
+<th:block th:replace="public/footer :: footer(~{})"/>
 <script th:src="@{/plugins/iCheck/icheck.min.js}"></script>
 <script>
   $(function () {

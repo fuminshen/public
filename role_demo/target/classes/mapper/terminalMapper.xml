@@ -19,7 +19,8 @@
 								and a.addTime &lt;= #{value}
 							</when>
 							<otherwise>
-								and ${key} = #{value}
+								and 
+								<if test='key == "number"'>a.</if>${key} = #{value}
 							</otherwise>
 						</choose>
 					</otherwise>
