@@ -18,7 +18,7 @@ mapper:
 
 logging:
   level:
-    com.fumin.role.demo: warning
+    com.fumin.role.demo: debug
   
 spring:
   thymeleaf:

@@ -169,7 +169,9 @@ public class ClientController extends PageController<Client> {
 			entity = new HashMap<>();
 		}
 		Admin admin = getLoginUser();
-		entity.put("userId", admin.getId());
+		if(admin.getCompanyId()!=null && admin.getCompanyId()>1 && admin.getRole()>1) {
+			entity.put("companyId", admin.getCompanyId());
+		}
 		if(sortName!=null && sortName.trim().length()>0) {
 			entity.put("ORDER_BY", sortName+" "+sortType);
 		}

@@ -39,26 +39,16 @@
       
       <div class="form-group">
         <label>地区</label>
-        <div class="input-group">
           <select class="form-control" name="companyId"> 
             <option value="">全部地区</option>
             <option th:each="cm:${companys}" th:value="${cm.id}" th:if="${cm.id>1}" th:selected="${param.companyId+'' == cm.id+''}">[[${cm.name}]]</option>
           </select>
-        </div>
-      </div>
-      
-      <div class="form-group">
-        <label>业务员</label>
-        <div class="input-group">
-          <select class="form-control" name="userId"> 
-            <option value="">全部业务员</option>
-            <option th:each="cm:${admins}" th:value="${cm.id}" th:if="${cm.id>1}" th:selected="${param.userId+'' == cm.id+''}">[[${cm.username}]]-[[${cm.name}]]</option>
-          </select>
-        </div>
       </div>
       
       <button type="submit" class="btn btn-info"><i class="fa fa-search"></i> 搜索</button>
       <a href="?" class="btn btn-default"><i class="fa fa-times"></i> 清空</a>
+      
+      <button type="button" class="btn btn-success" onclick="download()"><i class="fa fa-download"></i> Excel下载</button>
     </form>
   </div>
 </div>
@@ -80,8 +70,6 @@
                     <th>联系人</th>
                     <th>联系电话</th>
                     <th>地址</th>
-                    <th>业务员</th>
-                    <th>业务员编号</th>
                     <th>巡检</th>
                     <th>新增</th>
                     <th>维修</th>
@@ -114,15 +102,13 @@ data.setColumns([
 	{"data":"clientNumber"},
 	{"data":"number"},
 	{"data":"posNumber"},
-	{"data":"manager"},
+	{"data":"manager",width:70},
 	{"data":"phone"},
 	{"data":"address"},
-	{"data":"adminName",width:100},
-	{"data":"username",width:120},
-	{"data":"xj",width:90},
-	{"data":"xz",width:90},
-	{"data":"wx",width:90},
-	{"data":"gh",width:90}
+	{"data":"xj",width:50},
+	{"data":"xz",width:50},
+	{"data":"wx",width:50},
+	{"data":"gh",width:50}
 ]);
 $(function () {
 	$('.datepicker').datepicker({
@@ -133,7 +119,37 @@ $(function () {
 		orientation:'bottom'
     });
 	$('#example1').DataTable(data );
-})
+});
+function download(){
+	var data= $("#searchFrm").serializeArray();
+	var obj = {};
+	$.each(data,function(i,v){
+		if(v.name){
+			obj[v.name] = v.value;
+		}
+	});
+	//$("#searchFrm").attr("action","/inspection/totals/download")
+	post("/inspection/totals/download",obj);
+}
+function post(URL, PARAMS)
+{
+	console.log(PARAMS);
+    var temp = document.createElement("form");
+    temp.action = URL;
+    temp.method = "post";
+    temp.style.display = "none";
+    for (var x in PARAMS)
+    {
+        var opt = document.createElement("textarea");
+        opt.name = x;
+        opt.value = PARAMS[x];
+        // alert(opt.name)
+        temp.appendChild(opt);
+    }
+    document.body.appendChild(temp);
+    temp.submit();
+    return temp;
+} 
 </script>
 </footerScript>
 </th:block>

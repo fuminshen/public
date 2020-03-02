@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Update;
 
 import com.fumin.role.demo.bean.Client;
 import com.fumin.role.demo.util.DataMapper;
@@ -32,4 +33,7 @@ public interface ClientMapper extends DataMapper<Client> {
 			@Param("companyId") Integer companyId,
 			@Param("userId")Integer userId,
 			@Param("ids")List<?> ids);
+	
+	@Update("update g_client set isChecked=0")
+	public void clearCheckedState();
 }

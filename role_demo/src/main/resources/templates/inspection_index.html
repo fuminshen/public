@@ -36,6 +36,20 @@
           <input type="text" class="form-control pull-right datepicker" name="addTime_end" th:value="${param.addTime_end}" autocomplete="off">
         </div>
       </div>
+      
+      <div class="form-group">
+        <label>业务员</label>
+        <input type="text" class="form-control" name="username" th:value="${param.username}">
+      </div>
+      
+      <div class="form-group">
+        <label>地区</label>
+          <select class="form-control" name="companyId"> 
+            <option value="">全部地区</option>
+            <option th:each="cm:${company}" th:value="${cm.id}" th:if="${cm.id>1}" th:selected="${param.companyId+'' == cm.id+''}">[[${cm.name}]]</option>
+          </select>
+      </div>
+      
       <button type="submit" class="btn btn-info"><i class="fa fa-search"></i> 搜索</button>
       <a href="?" class="btn btn-default"><i class="fa fa-times"></i> 清空</a>
     </form>
@@ -51,6 +65,7 @@
               <table  id="example1" class="table table-striped" style="min-width:800px">
                 <thead>
                   <tr>
+                    <th>业务员</th>
                     <th>客户名称</th>
                     <th>客户编号</th>
                     <th>终端编号</th>
@@ -82,6 +97,7 @@ var data=$.fm.createPagerData("/inspection/list");
 data.controllerBtn=false;
 data.iDisplayLength=50;
 data.setColumns([
+	{"data":"adminName"},
 	{"data":"name"},
 	{"data":"clientNumber"},
 	{"data":null,"render":function (data, type, row, meta) {

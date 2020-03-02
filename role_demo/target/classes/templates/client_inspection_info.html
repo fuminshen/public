@@ -38,10 +38,11 @@
     </div>
     <input type="hidden" name="clientId" th:value="${vo?.id}">
     <input type="hidden" name="type">
-    <button class="btn btn-success" value="1" type="button"><i class="fa fa-check"></i> 已巡检</button>
-    <button class="btn btn-danger" value="3" type="button"><i class="fa fa-wrench"></i> 已维修</button>
-    <a class="btn btn-info" th:href="@{|/terminal/new/terminal/${vo.id}|}"><i class="fa fa-plus"></i> 新安装</a>
-    <button class="btn btn-default" type="button" onclick="self.location=document.referrer;"><i class="fa fa-arrow-left"></i> 返回</button>
+    <button class="btn btn-success" value="1" type="button"><i class="fa fa-check"></i> 巡检</button>
+    <button class="btn btn-danger" value="3" type="button"><i class="fa fa-wrench"></i> 维修</button>
+    <a class="btn btn-info" th:href="@{|/terminal/new/terminal/${vo.id}|}"><i class="fa fa-plus"></i> 新装</a>
+    <button class="btn btn-warning" value="4" type="button"><i class="fa fa-refresh"></i> 换机</button>
+    <a href="#" onclick="self.location=document.referrer;"><i class="fa fa-arrow-left"></i> 返回</a>
     </form>
 </body>
 <footerScript th:remove="tag">
@@ -49,7 +50,7 @@
 $(function(){
 	$("button").click(function(){
 		var t=this;
-		if(this.value!=2 && $("input[type=checkbox]:checked").length==0){
+		if( this.value!=2 && $("input[type=checkbox]:checked").length==0){
 			bootbox.alert("没有选中要操作的终端");
 			return false;
 		}

@@ -5,8 +5,8 @@
 	
 <mapper namespace="com.fumin.role.demo.mapper.InspectionMapper">
 	<select id="getInspectionToMap" resultType="map">
-		select a.number,a.posNumber,c.id,c.time,c.type,b.number as clientNumber,b.name,b.phone,b.manager,b.address 
-		from g_inspection c left join g_terminal a on a.id=c.terminalId left join g_client b on b.id=c.clientId left join g_admins e on e.id=a.userId 
+		select a.number,a.posNumber,c.id,c.time,c.type,b.number as clientNumber,b.name,b.phone,b.manager,b.address,e.name as adminName,e.username 
+		from g_inspection c left join g_terminal a on a.id=c.terminalId left join g_client b on b.id=c.clientId left join g_admins e on e.id=c.userId 
 		<if test="params != null">
 			<where>
 				<foreach collection="params" item="value" index="key">
@@ -20,7 +20,14 @@
 									and c.time &lt;= #{value}
 								</when>
 								<otherwise>
-									and c.${key} = #{value}
+									<choose>
+										<when test='key == "username"'>
+											and e.name like #{value}
+										</when>
+										<otherwise>
+											and c.${key} = #{value}
+										</otherwise>
+									</choose>
 								</otherwise>
 							</choose>
 						</otherwise>

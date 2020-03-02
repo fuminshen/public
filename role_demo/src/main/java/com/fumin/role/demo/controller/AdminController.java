@@ -35,6 +35,11 @@ public class AdminController extends PageController<Admin> {
 		if(t.getRole()==null || t.getRole().intValue()<=0) {
 			throw new FmException("角色权限未设置");
 		}
+		if(isAddAction()) {
+			if(t.getCompanyId()==null || t.getCompanyId()<=0) {
+				throw new FmException("所属地区未设置");
+			}
+		}
 		
 		return true;
 	}

@@ -1,10 +1,17 @@
 package com.fumin.role.demo.controller;
 
+import java.io.IOException;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.logging.log4j.util.Strings;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.util.IOUtils;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -75,6 +82,9 @@ public class InspectionController extends PageController<Inspection> {
 		if(admin.getRole().intValue()==3) {
 			entity.put("userId", admin.getId());
 		}
+		if( entity.get("username")!=null && !StringUtils.isEmpty(entity.get("username")) ) {
+			entity.put("username", entity.get("username").toString()+"%");
+		}
 		
 		if(sortName!=null && sortName.trim().length()>0) {
 			entity.put("ORDER_BY", sortName+" "+sortType);
@@ -100,6 +110,28 @@ public class InspectionController extends PageController<Inspection> {
 		request.setAttribute("admins", admins);
 		
 		return "inspection_totals";
+	}
+	
+	@PostMapping("/totals/download")
+	@ResponseBody
+	public String inspectionTotalsDownload(@RequestParam Map<String, Object> entity) throws IOException {
+		if(entity!=null) {
+			Collection<Object> values = entity.values();
+			Iterator<Object> iterator = values.iterator();
+			while(iterator.hasNext()) {
+				Object next = iterator.next();
+				if(next==null || Strings.isEmpty(next.toString())) {
+					iterator.remove();
+				}
+			}
+		}
+		Workbook book = ((InspectionService)service).getPageToMapTotalsDownload(entity);
+		if(book==null) {
+			throw new FmException("Excel文件生成失败");
+		}
+		response.setHeader("Content-Disposition", new String(("attachment;filename=excel.xlsx").getBytes(), "UTF8"));
+		IOUtils.writeAndClose(book, response.getOutputStream());
+		return null;
 	}
 	
 	@PostMapping("/totalslist")
@@ -148,5 +180,13 @@ public class InspectionController extends PageController<Inspection> {
 			entity.put("ORDER_BY", sortName+" "+sortType);
 		}
 		return ((InspectionService)service).getInspectionTerminalGroupToMap(entity, currePage, pageSize);
+	}
+	
+	@Override
+	public String index() {
+		CompanyServiceImpl service2 = getService(CompanyServiceImpl.class);
+		List<Company> byEntity = service2.getByEntity(null);
+		request.setAttribute("company", byEntity);
+		return super.index();
 	}
 }

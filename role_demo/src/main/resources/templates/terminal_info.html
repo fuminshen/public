@@ -8,6 +8,7 @@
     <form class="form-horizontal" th:attr="action=${vo!=null}?@{/terminal/update}:@{/terminal/add}" method="post" th:object="${vo}">
       <input th:field="*{id}" type="hidden" th:if="${vo!=null}">
       <input th:value="${param.cid}" name="cid" type="hidden" th:if="${param.cid!=null}">
+      <input th:value="${param.admin}" name="admin" type="hidden" th:if="${param.admin!=null}">
       <input th:value="${clientId}" name="clientId" type="hidden" th:if="${vo==null}">
       <div class="box-body">
         <div class="form-group">

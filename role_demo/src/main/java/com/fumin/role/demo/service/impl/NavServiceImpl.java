@@ -91,4 +91,10 @@ public class NavServiceImpl extends BaseServiceImpl<Nav> implements NavService {
 		((NavMapper)dao).delForRole(roleId,navId);
 	}
 	
+	public List<Nav> getAllForNav() {
+		Nav nav = new Nav();
+		nav.setHide(0);
+		return dao.select(nav);
+	}
+	
 }

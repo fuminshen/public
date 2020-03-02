@@ -31,7 +31,7 @@ public abstract class SuperController<T> extends BaseController implements Appli
 	@ModelAttribute
 	public void setNav(){
 		NavService nav = getService(NavServiceImpl.class);
-		request.setAttribute("navs", nav.getAll());
+		request.setAttribute("navs", nav.getAllForNav());
 	}
 	
 	public Admin getLoginUser() {

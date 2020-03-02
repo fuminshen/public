@@ -11,4 +11,6 @@ public interface ClientService extends BaseService<Client> {
 	public void setDistributeAsc(Integer companyId);
 	public void setDistributeRand(Integer companyId);
 	public void setDistributeManual(Integer companyId,Integer userId,Object clientId);
+	
+	public void clearCheckedState();
 }

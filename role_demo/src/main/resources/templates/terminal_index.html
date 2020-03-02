@@ -19,6 +19,18 @@
         <input type="hidden" name="clientId" th:value="${param.clientId}">
       </div>
       </div>
+      
+      <div class="form-group">
+      <div class="input-group">
+        <div class="input-group-addon">状态</div>
+        <select name="type" class="form-control">
+        	<option value="">全部</option>
+        	<option th:selected="${param.type+'' eq '1'}" value="1">正常</option>
+        	<option th:selected="${param.type+'' eq '2'}" value="2">已拆机</option>
+        	<option th:selected="${param.type+'' eq '3'}" value="3">等待换机</option>
+        </select>
+      </div>
+      </div>
       <button type="submit" class="btn btn-info"><i class="fa fa-search"></i> 搜索</button>
       <a href="?" class="btn btn-default"><i class="fa fa-times"></i> 清空</a>
     </form>
@@ -42,6 +54,7 @@
                     <th>商铺编号</th>
                     <th>联系人</th>
                     <th>地址</th>
+                    <th>状态</th>
                     <th>编辑</th>
                   </tr>
                 </thead>
@@ -54,15 +67,35 @@
 <script th:src="@{/bower_components/datatables.net/js/jquery.dataTables.min.js}"></script>
 <script th:src="@{/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js}"></script>
 <script th:src="@{/js/pager_comm.js}"></script>
-<script>
-var data=$.fm.createPagerData("/terminal/list");
+<script th:inline="javascript">
+var data=$.fm.createPagerData([[@{/terminal/list}]]);
+data.controllerBtn=false;
+//data.controllerAddBtnText="<a href='/terminal/new/terminal/#id?cid=#id' title='换机'><i class='fa fa-refresh'></i></a>";
 data.setColumns([
 	{"data":"tNumber"},
 	{"data":"posNumber"},
 	{"data":"name"},
 	{"data":"number"},
 	{"data":"manager"},
-	{"data":"address"}
+	{"data":"address"},
+	{"data":null,"width":75,"render": function (data, type, row, meta) {
+		if(data.type==1){
+			return "正常";
+		}else if(data.type==3){
+			return "等待换机";
+		}else{
+			return "已拆机";
+		}
+	}
+	},
+	{"data":null,"render": function (data, type, row, meta) {
+		var url = [[@{/terminal}]];
+		var frmid = "frm_"+data.id+"_"+meta.settings.nTable.id;
+		return "<form id='"+frmid+"' method='post' action='"+url+"/delete'><input name='id' value='"+data.id+"' type='hidden'>"+
+		"<a href='"+url+"/get/"+data.id+"' title='编辑'><i class='fa fa-edit'></i></a> "+
+		"<a href='"+url+"/new/terminal/"+data.clientId+"?cid="+data.id+"&admin=1' title='换机'><i class='fa fa-refresh'></i></a>"+
+		"<button type='button' class='btn-link' style='margin:0;padding:0' title='删除' onclick='bootbox.confirm(\"删除后不可恢复，是否确认？\",function(b){if(b){$(\"#"+frmid+"\").submit();}});'><i class='fa fa-remove text-red'></i></button></form>"}
+	}
 ]);
 $(function () {
 	$('#example1').DataTable(data );

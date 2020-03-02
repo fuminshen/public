@@ -87,4 +87,9 @@ public class ClientServiceImpl extends BaseServiceImpl<Client> implements Client
 		mapper.updateDistributeForManual(companyId, userId, ids);
 	}
 
+	@Override
+	public void clearCheckedState() {
+		((ClientMapper)mapper).clearCheckedState();
+	}
+
 }

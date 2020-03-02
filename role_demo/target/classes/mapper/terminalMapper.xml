@@ -5,7 +5,7 @@
 	
 <mapper namespace="com.fumin.role.demo.mapper.TerminalMapper">
 	<select id="getListToMapRewrite" resultType="map">
-		select a.id,a.number as tNumber,a.posNumber,b.name,b.number,b.manager,b.address from g_terminal a left join g_client b on b.id=a.clientId
+		select a.id,a.number as tNumber,a.posNumber,b.name,b.number,b.manager,b.address,a.clientId,a.type from g_terminal a left join g_client b on b.id=a.clientId
 		<if test="params != null">
 		<where>
 			<foreach collection="params" index="key" item="value">

@@ -13,4 +13,6 @@ public interface NavService extends BaseService<Nav> {
 	public void setForRole(Integer roleId,Integer navId);
 	
 	public void delForRole(Integer roleId,Integer navId);
+	
+	public List<Nav> getAllForNav();
 }
