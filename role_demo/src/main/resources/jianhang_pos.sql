@@ -11,7 +11,7 @@
  Target Server Version : 50644
  File Encoding         : 65001
 
- Date: 17/12/2019 09:31:15
+ Date: 19/03/2020 14:35:44
 */
 
 SET NAMES utf8mb4;
@@ -76,7 +76,7 @@ INSERT INTO `g_client` VALUES (2, 2, '105000358143359', '吉首市宗盛小食�
 INSERT INTO `g_client` VALUES (3, 2, '105000448121902', '吉首市兴行通讯服务有限公司', '湖南省吉首市镇溪办事处人民北路76路102号', '18627437773', 0.00000000, 0.00000000, '易守珍', 9, 0);
 INSERT INTO `g_client` VALUES (4, 2, '105001054992711', '吉首市尚优鲜果店', '湖南省吉首市环城路阳光城130-132号', '17774308537', 0.00000000, 0.00000000, '伍林娟', 12, 0);
 INSERT INTO `g_client` VALUES (5, 2, '105000358143370', '吉首市梅香书吧', '湖南省吉首市吉大新校内图书馆二楼', '17872096123', 0.00000000, 0.00000000, '杨梅香', 9, 0);
-INSERT INTO `g_client` VALUES (6, 2, '105000086511464', '湘西州龙腾司法鉴定中心', '吉首市光明东路5号', '13739038557', 0.00000000, 0.00000000, '田小红', 8, 1);
+INSERT INTO `g_client` VALUES (6, 2, '105000086511464', '湘西州龙腾司法鉴定中心', '吉首市光明东路5号', '13739038557', 0.00000000, 0.00000000, '田小红', 8, 0);
 INSERT INTO `g_client` VALUES (7, 2, '105000372301841', '吉首市梵古沙龙理发店', '湖南省吉首市武陵西路临街门面1号', '13037410818', 0.00000000, 0.00000000, '麻入凡', 9, 0);
 INSERT INTO `g_client` VALUES (8, 2, '105000652116075', '吉首市天正移门加工厂', '湖南省吉首市乾州办事处小溪桥社区二组', '15200777230', 0.00000000, 0.00000000, '耿强', 8, 0);
 INSERT INTO `g_client` VALUES (9, 2, '105000282991177', '湘西晨艺艺体培训学校有限公司', '湖南省湘西经开区溶江小区S7栋305-309号门面', '17674308899', 0.00000000, 0.00000000, '龚晨晨', 12, 0);
@@ -980,7 +980,7 @@ DROP TABLE IF EXISTS `g_inspection`;
 CREATE TABLE `g_inspection`  (
   `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `clientId` int(10) UNSIGNED NOT NULL,
-  `terminalId` int(11) NOT NULL,
+  `terminalId` int(11) DEFAULT NULL,
   `userId` int(10) UNSIGNED NOT NULL,
   `companyId` int(10) UNSIGNED DEFAULT NULL,
   `longitude` decimal(19, 8) NOT NULL DEFAULT 0.00000000,
@@ -989,25 +989,27 @@ CREATE TABLE `g_inspection`  (
   `time` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `time_userId_companyId`(`time`, `userId`, `companyId`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 18 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of g_inspection
 -- ----------------------------
-INSERT INTO `g_inspection` VALUES (1, 2, 0, 4, 0, 0.00000000, 0.00000000, 1, '2019-08-19 11:52:37');
-INSERT INTO `g_inspection` VALUES (3, 3, 2, 4, 0, 0.00000000, 0.00000000, 1, '2019-09-03 09:59:15');
-INSERT INTO `g_inspection` VALUES (4, 3, 4, 4, 0, 0.00000000, 0.00000000, 1, '2019-09-03 09:59:15');
-INSERT INTO `g_inspection` VALUES (5, 2, 12, 4, NULL, 0.00000000, 0.00000000, 2, '2019-09-03 11:00:36');
-INSERT INTO `g_inspection` VALUES (6, 6, 14, 2, NULL, 0.00000000, 0.00000000, 2, '2019-09-04 13:50:30');
-INSERT INTO `g_inspection` VALUES (7, 4, 15, 4, NULL, 0.00000000, 0.00000000, 2, '2019-09-04 13:57:07');
-INSERT INTO `g_inspection` VALUES (8, 2, 17, 4, NULL, 0.00000000, 0.00000000, 2, '2019-09-04 14:03:28');
-INSERT INTO `g_inspection` VALUES (9, 4, 18, 4, NULL, 0.00000000, 0.00000000, 4, '2019-09-07 10:57:19');
-INSERT INTO `g_inspection` VALUES (10, 4, 19, 4, NULL, 0.00000000, 0.00000000, 4, '2019-09-07 11:00:12');
-INSERT INTO `g_inspection` VALUES (11, 4, 20, 4, NULL, 0.00000000, 0.00000000, 4, '2019-09-07 11:01:30');
-INSERT INTO `g_inspection` VALUES (12, 4, 21, 4, NULL, 0.00000000, 0.00000000, 4, '2019-09-07 11:02:58');
-INSERT INTO `g_inspection` VALUES (13, 2, 22, 4, NULL, 0.00000000, 0.00000000, 4, '2019-09-07 11:28:03');
+INSERT INTO `g_inspection` VALUES (1, 2, 0, 8, 0, 0.00000000, 0.00000000, 1, '2019-08-19 11:52:37');
+INSERT INTO `g_inspection` VALUES (3, 3, 2, 8, 0, 0.00000000, 0.00000000, 1, '2019-09-03 09:59:15');
+INSERT INTO `g_inspection` VALUES (4, 3, 4, 8, 0, 0.00000000, 0.00000000, 1, '2019-09-03 09:59:15');
+INSERT INTO `g_inspection` VALUES (5, 2, 12, 8, NULL, 0.00000000, 0.00000000, 2, '2019-09-03 11:00:36');
+INSERT INTO `g_inspection` VALUES (6, 6, 14, 9, NULL, 0.00000000, 0.00000000, 2, '2019-09-04 13:50:30');
+INSERT INTO `g_inspection` VALUES (7, 4, 15, 10, NULL, 0.00000000, 0.00000000, 2, '2019-09-04 13:57:07');
+INSERT INTO `g_inspection` VALUES (8, 2, 17, 1011, NULL, 0.00000000, 0.00000000, 2, '2019-09-04 14:03:28');
+INSERT INTO `g_inspection` VALUES (9, 4, 18, 10, NULL, 0.00000000, 0.00000000, 4, '2019-09-07 10:57:19');
+INSERT INTO `g_inspection` VALUES (10, 4, 19, 10, NULL, 0.00000000, 0.00000000, 4, '2019-09-07 11:00:12');
+INSERT INTO `g_inspection` VALUES (11, 4, 20, 8, NULL, 0.00000000, 0.00000000, 4, '2019-09-07 11:01:30');
+INSERT INTO `g_inspection` VALUES (12, 4, 21, 10, NULL, 0.00000000, 0.00000000, 4, '2019-09-07 11:02:58');
+INSERT INTO `g_inspection` VALUES (13, 2, 22, 8, NULL, 0.00000000, 0.00000000, 4, '2019-09-07 11:28:03');
 INSERT INTO `g_inspection` VALUES (14, 6, 6, 8, 2, 0.00000000, 0.00000000, 1, '2019-11-07 11:59:59');
 INSERT INTO `g_inspection` VALUES (15, 1, 1, 14, 1, 0.00000000, 0.00000000, 1, '2019-12-12 10:10:00');
+INSERT INTO `g_inspection` VALUES (16, 1, 1, 14, 1, 0.00000000, 0.00000000, 4, '2020-02-28 15:00:19');
+INSERT INTO `g_inspection` VALUES (17, 1, 1, 14, 1, 0.00000000, 0.00000000, 4, '2020-02-28 15:01:54');
 
 -- ----------------------------
 -- Table structure for g_nav
@@ -1109,12 +1111,12 @@ CREATE TABLE `g_terminal`  (
   `type` int(10) UNSIGNED NOT NULL DEFAULT 1 COMMENT '1:新装。2:拆机。3:换机',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `number`(`number`, `posNumber`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 921 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 923 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of g_terminal
 -- ----------------------------
-INSERT INTO `g_terminal` VALUES (1, '10408116', '1050009533168080001', 1, NULL, '2019-11-04 15:28:09', NULL, 1);
+INSERT INTO `g_terminal` VALUES (1, '10408116', '1050009533168080001', 1, NULL, '2019-11-04 15:28:09', NULL, 3);
 INSERT INTO `g_terminal` VALUES (2, '10408124', '1050003581433590001', 2, NULL, '2019-11-04 15:28:09', NULL, 1);
 INSERT INTO `g_terminal` VALUES (3, '10408374', '1050004481219020001', 3, NULL, '2019-11-04 15:28:09', NULL, 1);
 INSERT INTO `g_terminal` VALUES (4, '10408376', '1050010549927110001', 4, NULL, '2019-11-04 15:28:09', NULL, 1);
@@ -2033,7 +2035,7 @@ INSERT INTO `g_terminal` VALUES (916, '10277600', '1050001701312680001', 864, NU
 INSERT INTO `g_terminal` VALUES (917, '10281830', '1050001572291840001', 865, NULL, '2019-11-04 15:28:09', NULL, 1);
 INSERT INTO `g_terminal` VALUES (918, '10290231', '1050000472239700001', 867, NULL, '2019-11-04 15:28:09', NULL, 1);
 INSERT INTO `g_terminal` VALUES (919, '10292186', '1050007533189870001', 868, NULL, '2019-11-04 15:28:09', NULL, 1);
-INSERT INTO `g_terminal` VALUES (920, '10273448', '1050000581388160001', 869, NULL, '2019-11-04 15:28:09', NULL, 1);
+INSERT INTO `g_terminal` VALUES (922, '1050000581388160003', '10273450', 869, 14, '2020-02-25 17:19:56', 921, 1);
 
 -- ----------------------------
 -- Table structure for g_terminal_old
@@ -2056,6 +2058,8 @@ CREATE TABLE `g_terminal_old`  (
 -- Records of g_terminal_old
 -- ----------------------------
 INSERT INTO `g_terminal_old` VALUES (17, '100011', '1000011', 2, 4, '2019-09-04 14:03:28', NULL, 0);
+INSERT INTO `g_terminal_old` VALUES (920, '10273448', '1050000581388160001', 869, NULL, '2019-11-04 15:28:09', NULL, 1);
+INSERT INTO `g_terminal_old` VALUES (921, '10273449', '1050000581388160002', 869, 14, '2020-02-25 11:33:14', 920, 1);
 
 -- ----------------------------
 -- Event structure for clear_client_checked_state
